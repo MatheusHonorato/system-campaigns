@@ -55,7 +55,6 @@
                     <thead>
                         <tr>
                             <th scope="col">Nome</th>
-                            <th scope="col">Descrição.</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Excluir</th>
                         </tr>
@@ -64,7 +63,6 @@
                         @foreach($campaigns as $campaign)
                         <tr>
                             <td id="campaign_name_{{ $campaign->id }}">{{ $campaign->name }}</td>
-                            <td id="campaign_description_{{ $campaign->id }}">{{ $campaign->description }}</td>
                             <td>
                                 <!-- Modal Edit --> 
                                 <div class="modal fade" id="modalEdit{{ $campaign->id }}" tabindex="-1" role="dialog" aria-hidden="true">

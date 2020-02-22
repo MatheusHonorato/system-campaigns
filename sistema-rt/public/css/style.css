@@ -1,3 +1,6 @@
 .nav-item .active {
     color: #083458;
 }
+#modallogo {
+    padding-left: 0px !important;
+}

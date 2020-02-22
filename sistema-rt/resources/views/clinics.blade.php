@@ -55,9 +55,6 @@
                     <thead>
                         <tr>
                             <th scope="col">Nome</th>
-                            <th scope="col">R.C</th>
-                            <th scope="col">R.T</th>
-                            <th scope="col">R.P</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Excluir</th>
                         </tr>
@@ -66,9 +63,6 @@
                         @foreach($clinics as $clinic)
                         <tr>
                             <td id="clinic_name_{{ $clinic->id }}">{{ $clinic->name }}</td>
-                            <td id="clinic_clinic_record_{{ $clinic->id }}">{{ $clinic->clinic_record }}</td>
-                            <td id="technical_manager_{{ $clinic->id }}">{{ $clinic->technical_manager }}</td>
-                            <td id="professional_record_{{ $clinic->id }}">{{ $clinic->professional_record }}</td>
                             <td>
                                 <!-- Modal Edit --> 
                                 <div class="modal fade" id="modalEdit{{ $clinic->id }}" tabindex="-1" role="dialog" aria-hidden="true">

@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\Campaign;
 use App\CampaignPost;
-use App\Image;
+use App\Figure;
 use App\PostImage;
+use Storage;
 
 class PostController extends Controller
 {
@@ -74,12 +75,12 @@ class PostController extends Controller
             {
                 if($image->isValid())
                 {
-                    $new_image = Image::create(
+                    $new_image = Figure::create(
                         ['path' => $image->store('images')]
                     );
 
                     PostImage::create(
-                        ['post_id' => $post->id, 'image_id' => $new_image->id]
+                        ['post_id' => $post->id, 'figure_id' => $new_image->id]
                     );
                 }
                 unset($image);
@@ -116,13 +117,13 @@ class PostController extends Controller
         $images_id = [];
 
         foreach($post_images as $post_image) {
-            $images_id[] =  $post_image->image_id;
+            $images_id[] =  $post_image->figure_id;
         }
 
         $images = [];
 
         foreach($images_id as $image_id) {
-            $images[] = Image::find($image_id);
+            $images[] = Figure::find($image_id);
         }
 
         $campaign_post = CampaignPost::where('post_id', $id)->first();
@@ -137,11 +138,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => ['required', 'string', 'min:10', 'max:100'],
-            'color' => ['required', 'string', 'min:10', 'max:100'],
+            'name' => ['required', 'string', 'min:4', 'max:100'],
+            'color' => ['required', 'string', 'min:4', 'max:100'],
         ],[
             'name.required' => 'O campo Nome é obrigatório.',
             'name.min' => 'Desculpe, mas o nome deve possuir no mínimo 10 caracteres.',
@@ -150,9 +151,14 @@ class PostController extends Controller
             'color.required' => 'O campo Cor é obrigatório.'
         ]);
         
-        $post = Post::update(
+        $post = Post::find($id);
+        $post->update(
             ['name' => $request->name, 'color' => $request->color]
         );
+
+        $campaign_post = CampaignPost::where('post_id', $id)->first();
+        $campaign_post->campaign_id = $request->campaign;
+        $campaign_post->save();
 
         return back()->with('success','Post atualizado com sucesso!');
     }
@@ -163,9 +169,22 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post) 
+    public function destroy($id) 
     {
+        $campaign_post = CampaignPost::where('post_id',$id)->first();
+        $campaign_post->delete();
+        
+        $post_figures = PostImage::where('post_id', $id)->get();
 
+        PostImage::where('post_id', $id)->delete();
+
+        foreach($post_figures as $pf) {
+            $figure = Figure::find($pf->figure_id);
+            Storage::disk('public')->delete($figure->path);
+            $figure->delete();
+        }
+
+        $post = Post::find($id);
         $post->delete();
 
         return redirect()->back()->with('success','Post excluído com sucesso!');

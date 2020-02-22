@@ -27,6 +27,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="download-cart"></span>
+                            Logo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="download-cart"></span>
                             Download
                         </a>
                     </li>
@@ -123,6 +129,37 @@
             </div>
             <div class="form-group has-feedback {{ $errors->has('images') ? 'has-error' : '' }}">
                 <label class="col-md-12 pl-0">Imagens</label>
+                <input type="file" name="images[]" placeholder="Imagens" multiple required>
+                @if ($errors->has('images'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('images') }}</strong>
+                </span>
+                @endif
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Logo -->
+<div class="modal fade" id="modallogo" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Logo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('logos.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group has-feedback {{ $errors->has('logos') ? 'has-error' : '' }}">
+                <label class="col-md-12 pl-0">Logos</label>
                 <input type="file" name="images[]" placeholder="Imagens" multiple required>
                 @if ($errors->has('images'))
                 <span class="help-block">

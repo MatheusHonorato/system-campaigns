@@ -27,6 +27,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="download-cart"></span>
+                            Logo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="download-cart"></span>
                             Download
                         </a>
                     </li>

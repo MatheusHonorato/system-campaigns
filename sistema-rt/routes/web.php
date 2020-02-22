@@ -24,7 +24,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('posts', 'PostController')->names('posts')->parameters(['posts'=>'posts']);
 
-    Route::resource('imagens', 'ImageController')->names('images')->parameters(['imagens'=>'images']);
+    Route::resource('figures', 'FigureController')->names('figures')->parameters(['figures'=>'figures']);
+
+    Route::resource('logos', 'LogoController')->names('logos')->parameters(['logos'=>'logos']);
+
 });
 
 

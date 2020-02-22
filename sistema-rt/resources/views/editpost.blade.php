@@ -27,6 +27,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="download-cart"></span>
+                            Logo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="download-cart"></span>
                             Download
                         </a>
                     </li>
@@ -41,7 +47,9 @@
                         <strong>{{ $message }}</strong>
                     </div>
                 @endif
-                    <form method="POST">
+                    <form method="POST" action="{{ route('posts.update', $post->id) }}">
+                        @csrf
+                        @method('PATCH')
                         <div class="row">
                             <div class="form-group col-md-3 has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
                                 <label>Nome</label>
@@ -56,7 +64,7 @@
                                 <label>Campanha</label>
                                 <select class="form-control" name="campaign" required>
                                 @foreach($campaigns as $campaign)
-                                    <option value="{{ $campaign->id }}" @if($campaign->id == $campaign_post->id) selected @endif>{{ $campaign->name }}</option>
+                                    <option value="{{ $campaign->id }}" @if($campaign->id == $campaign_post->campaign_id) selected @endif>{{ $campaign->name }}</option>
                                 @endforeach
                                 </select>
                                 @if ($errors->has('campaign'))
@@ -67,7 +75,7 @@
                             </div>
                             <div class="form-group col-md-3 has-feedback {{ $errors->has('color') ? 'has-error' : '' }}">
                                 <label>Cor dos dados técnicos</label>
-                                <input type="color" class="form-control" name="color" value="{{ $post->color }}" placeholder="Cor" minlength="10" maxlength="50" required>
+                                <input type="color" class="form-control" name="color" value="{{ $post->color }}" placeholder="Cor" minlength="4" maxlength="50" required>
                                 @if ($errors->has('color'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('color') }}</strong>
@@ -93,7 +101,7 @@
                                 <img src="{{ route('welcome') }}/storage/{{ $image->path }}" class="img-thumbnail" width="100px">
                             </td>
                             <td>
-                                <form action="{{ route('images.destroy', $image->id) }}" method="POST">
+                                <form action="{{ route('figures.destroy', $image->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger">Excluir</button>

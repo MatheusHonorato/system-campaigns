@@ -17,8 +17,8 @@ class CreatePostImagesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('post_id');
             $table->foreign('post_id')->references('id')->on('posts');
-            $table->unsignedBigInteger('image_id');
-            $table->foreign('image_id')->references('id')->on('images');
+            $table->unsignedBigInteger('figure_id');
+            $table->foreign('figure_id')->references('id')->on('figures');
             $table->timestamps();
         });
     }

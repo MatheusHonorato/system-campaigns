@@ -25,7 +25,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a  href="" class="nav-link" data-toggle="modal" data-target="#modallogo">
                             <span data-feather="download-cart"></span>
                             Logo
                         </a>
@@ -163,5 +163,5 @@
     </div>
   </div>
 </div>
-
+@include('logo')
 @endsection

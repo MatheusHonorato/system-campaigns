@@ -25,7 +25,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a  href="" class="nav-link" data-toggle="modal" data-target="#modallogo">
                             <span data-feather="download-cart"></span>
                             Logo
                         </a>
@@ -158,16 +158,35 @@
       <div class="modal-body">
         <form action="{{ route('logos.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="form-group has-feedback {{ $errors->has('logos') ? 'has-error' : '' }}">
-                <label class="col-md-12 pl-0">Logos</label>
-                <input type="file" name="images[]" placeholder="Imagens" multiple required>
-                @if ($errors->has('images'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('images') }}</strong>
-                </span>
-                @endif
-            </div>
-      </div>
+                <div class="form-group has-feedback {{ $errors->has('logos') ? 'has-error' : '' }}">
+                    <label class="col-md-12 text-center">Versão 1</label>
+                    <div class="col-md-12 text-center">
+                        <img src="{{ route('welcome') }}/storage/images/default.png">
+                    </div>
+                    <div class="col-md-12 text-center mt-3">
+                        <input type="file" name="logo-one" placeholder="Imagens" required>
+                        @if ($errors->has('images'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('images') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="form-group has-feedback {{ $errors->has('logos') ? 'has-error' : '' }}">
+                    <label class="col-md-12 text-center">Versão 2</label>
+                    <div class="col-md-12 text-center">
+                        <img src="{{ route('welcome') }}/storage/images/default.png">
+                    </div>
+                    <div class="col-md-12 text-center mt-3">
+                        <input type="file" name="logo-two" placeholder="Imagens" required>
+                        @if ($errors->has('images'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('images') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+                </div>
+        </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary">Salvar</button>
         </form>

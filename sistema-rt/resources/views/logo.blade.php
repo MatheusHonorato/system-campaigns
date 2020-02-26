@@ -14,10 +14,14 @@
                 <div class="form-group has-feedback {{ $errors->has('logos') ? 'has-error' : '' }}">
                     <label class="col-md-12 text-center">Versão 1</label>
                     <div class="col-md-12 text-center">
-                        <img src="{{ route('welcome') }}/storage/images/default.png">
+                        @if(auth()->user()->path_logo_one != '') 
+                          <img src="{{ route('welcome') }}/storage/{{ auth()->user()->path_logo_one }}" width="100%">
+                        @else 
+                          <img src="{{ route('welcome') }}/storage/images/default.png">
+                        @endif
                     </div>
                     <div class="col-md-12 text-center mt-3">
-                        <input type="file" name="logo-one" placeholder="Imagens" required>
+                        <input type="file" name="logo_one" placeholder="Imagens">
                         @if ($errors->has('images'))
                         <span class="help-block">
                             <strong>{{ $errors->first('images') }}</strong>
@@ -28,10 +32,14 @@
                 <div class="form-group has-feedback {{ $errors->has('logos') ? 'has-error' : '' }}">
                     <label class="col-md-12 text-center">Versão 2</label>
                     <div class="col-md-12 text-center">
-                        <img src="{{ route('welcome') }}/storage/images/default.png">
+                        @if(auth()->user()->path_logo_two != '') 
+                          <img src="{{ route('welcome') }}/storage/{{ auth()->user()->path_logo_two }}" width="100%">
+                        @else 
+                          <img src="{{ route('welcome') }}/storage/images/default.png">
+                        @endif
                     </div>
                     <div class="col-md-12 text-center mt-3">
-                        <input type="file" name="logo-two" placeholder="Imagens" required>
+                        <input type="file" name="logo_two" placeholder="Imagens">
                         @if ($errors->has('images'))
                         <span class="help-block">
                             <strong>{{ $errors->first('images') }}</strong>

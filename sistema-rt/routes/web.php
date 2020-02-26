@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('logos', 'LogoController')->names('logos')->parameters(['logos'=>'logos']);
 
+    Route::get('download', 'DownloadController@index')->name('download');
+
 });
 
 

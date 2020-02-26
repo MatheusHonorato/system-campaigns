@@ -16,7 +16,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-
+            <!-- Icons -->
+            <script src="https://use.fontawesome.com/60f53529f3.js"></script>
 </head>
 <body>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -75,12 +76,6 @@
        
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-
-        <!-- Icons -->
-        <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-        <script>
-      feather.replace()
-    </script>
 
 </body>
 </html>

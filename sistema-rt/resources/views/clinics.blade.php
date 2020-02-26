@@ -3,42 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('clinics.index') }}">
-                            <span data-feather="home"></span>
-                            Clínicas <span class="sr-only"></span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('campaigns.index') }}">
-                            <span data-feather="bar-chart-2"></span>
-                        Campanhas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('posts.index') }}">
-                            <span data-feather="shopping-cart"></span>
-                            Posts
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a  href="" class="nav-link" data-toggle="modal" data-target="#modallogo">
-                            <span data-feather="download-cart"></span>
-                            Logo
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="download-cart"></span>
-                            Download
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        @include('nav')
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="col-md-11">
                 @if ($message = Session::get('success'))
@@ -200,4 +165,5 @@
   </div>
 </div>
 @include('logo')
+@include('download')
 @endsection

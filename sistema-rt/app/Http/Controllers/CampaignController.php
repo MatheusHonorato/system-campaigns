@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Campaign;
+use App\Clinic;
 
 class CampaignController extends Controller
 {
@@ -16,8 +17,10 @@ class CampaignController extends Controller
     public function index()
     {
         $campaigns = Campaign::paginate(15);
+        $clinics_option = Clinic::all();
+        $campaigns_option = Campaign::all();
 
-        return view('campaigns', compact('campaigns'));
+        return view('campaigns', compact('campaigns','clinics_option','campaigns_option'));
     }
 
     /**

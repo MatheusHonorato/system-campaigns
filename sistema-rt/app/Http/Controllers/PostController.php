@@ -10,6 +10,7 @@ use App\CampaignPost;
 use App\Figure;
 use App\PostImage;
 use Storage;
+use App\Clinic;
 
 class PostController extends Controller
 {
@@ -22,8 +23,10 @@ class PostController extends Controller
     {
         $posts = Post::paginate(15);
         $campaigns = Campaign::all();
+        $clinics_option = Clinic::all();
+        $campaigns_option = Campaign::all();
 
-        return view('posts', compact('posts','campaigns'));
+        return view('posts', compact('posts','campaigns','clinics_option','campaigns_option'));
     }
 
     /**

@@ -115,6 +115,9 @@ class PostController extends Controller
         $post = Post::find($id);
         $campaigns = Campaign::all();
 
+        $clinics_option = Clinic::all();
+        $campaigns_option = Campaign::all();
+
         $post_images = PostImage::where('post_id', $id)->get();
 
         $images_id = [];
@@ -131,7 +134,7 @@ class PostController extends Controller
 
         $campaign_post = CampaignPost::where('post_id', $id)->first();
         
-        return view('editpost', compact('post','campaign_post','campaigns','images'));
+        return view('editpost', compact('post','campaign_post','campaigns','images','clinics_option','campaigns_option'));
     }
 
     /**

@@ -21,7 +21,7 @@
                         </div>
                         <div class="form-group row">
                             <label class="pl-0 col-sm-2 col-form-label">Campanha</label>
-                            <select class="form-control">
+                            <select class="form-control" name="campaign">
                                 @foreach($campaigns_option as $campaign)
                                     <option value="{{ $campaign->id }}">{{ $campaign->name }}</option>
                                 @endforeach

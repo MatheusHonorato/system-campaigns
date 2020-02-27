@@ -52,15 +52,6 @@
                                                         </span>
                                                         @endif
                                                     </div>
-                                                    <div class="form-group has-feedback {{ $errors->has('description') ? 'has-error' : '' }}">
-                                                        <label>Descrição</label>
-                                                        <input type="text" class="form-control" name="description" placeholder="Descrição" value="{{ $campaign->description }}" minlength="10" maxlength="50" required>
-                                                        @if ($errors->has('description'))
-                                                        <span class="help-block">
-                                                            <strong>{{ $errors->first('description') }}</strong>
-                                                        </span>
-                                                        @endif
-                                                    </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-primary">Salvar</button>
@@ -100,24 +91,45 @@
             </button>
         </div>
         <div class="modal-body">
-            <form action="{{ route('campaigns.store') }}" method="POST">
+            <form action="{{ route('campaigns.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
                     <label>Nome</label>
-                    <input type="text" class="form-control" name="name" placeholder="Nome" minlength="10" maxlength="50" required>
+                    <input type="text" class="form-control" name="name" placeholder="Nome" maxlength="50" required>
                     @if ($errors->has('name'))
                     <span class="help-block">
                         <strong>{{ $errors->first('name') }}</strong>
                     </span>
                     @endif
                 </div>
-                <div class="form-group has-feedback {{ $errors->has('description') ? 'has-error' : '' }}">
-                    <label>Descrição</label>
-                    <input type="text" class="form-control" name="description" placeholder="Descrição" minlength="10" maxlength="50" required>
-                    @if ($errors->has('description'))
+                <div class="form-group has-feedback {{ $errors->has('logo') ? 'has-error' : '' }}">
+                    <label>Logo</label>
+                    <select class="form-control" name="logo" required>
+                        <option value="0">Original</option>
+                        <option value="1">Transparente</option>
+                    </select>
+                    @if ($errors->has('logo'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('description') }}</strong>
+                        <strong>{{ $errors->first('logo') }}</strong>
                     </span>
+                    @endif
+                    </div>
+                    <div class="form-group has-feedback {{ $errors->has('color') ? 'has-error' : '' }}">
+                        <label>Cor dos dados técnicos</label>
+                        <input type="color" class="form-control" name="color" placeholder="Cor" maxlength="50" required>
+                        @if ($errors->has('color'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('color') }}</strong>
+                        </span>
+                        @endif
+                    </div>
+                <div class="form-group has-feedback {{ $errors->has('image') ? 'has-error' : '' }}">
+                    <label class="col-md-12 pl-0">Imagem</label>
+                    <input type="file" name="images[]" placeholder="Imagens" multiple required> 
+                    @if ($errors->has('images'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('images') }}</strong>
+                        </span>
                     @endif
                 </div>
         </div>

@@ -8,6 +8,11 @@ use App\Figure;
 use App\User;
 use Response;
 use Storage;
+use Madzipper;
+use App\CampaignPost;
+use App\Post;
+use App\Color;
+use App\Clinic;
 
 class DownloadController extends Controller
 {
@@ -18,40 +23,63 @@ class DownloadController extends Controller
      */
     public function index(Request $request)
     {
-        $figure = Figure::first();
 
-        // open an image file
-        $img = Image::make('storage/'.$figure->path);
+        array_map('unlink', glob('storage/images/tmp/*.jpg'));
+        array_map('unlink', glob('storage/*.zip'));
 
-        $user = User::where('email', 'adm@adm.com')->first();
+        $campaign_posts = CampaignPost::where('campaign_id', $request->campaign)->get();
+        $clinic = Clinic::find($request->clinic);
+        
+        if(count($campaign_posts) > 0) {
 
-        // and insert a watermark for example
-        $img->insert('storage/'.$user->path_logo_one);
+            $user = User::find(1);
 
-        //////////
-
-        // open an image file
-        $img_d = Image::make('storage/'.$figure->path);
-
-        $user = User::where('email', 'adm@adm.com')->first();
-
-        // and insert a watermark for example
-        $img_d->insert('storage/'.$user->path_logo_two);
-        // finally we save the image as a new file
-        $img->save('storage/images/tmp/'.rand().'.jpg');
-
-        $img_d->save('storage/images/tmp/'.rand().'.jpg');
-
-        $files = Storage::disk('public')->allFiles('images/tmp');
-
-        Zipper::make(public_path('images/tmp/test.zip'))->add($files);
-
-        return response()->download(public_path('test.zip'));
-
-        //return response()->download('storage/images/tmp/')->deleteFileAfterSend();
+            foreach($campaign_posts as $cp) {
     
-        //return $img->response(); //this code not right
-        //return response()->download('storage/images/'.$img);
+                $post = Post::find($cp->post_id);
+
+                // open an image file
+                $img = Image::make('storage/'.$post->image);
+    
+                if($post->logo == 0) {
+                    // and insert a watermark for example
+                    $img->insert('storage/'.$user->path_logo_one);
+                } else {
+                     // and insert a watermark for example
+                     $img->insert('storage/'.$user->path_logo_two);
+                }
+                
+                $name_img = rand().'.jpg';
+
+                $color = $post->color;
+
+                $text_rt = $clinic->name." ".$clinic->clinic_record." ".$clinic->technical_manager." ".$clinic->professional_record;
+
+                $text_rt = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $text_rt ) ); 
+
+                $img->text($text_rt, 10/* x */, 885 /* y */, function($font) use ($color) {
+                    //$font->file('arial');
+                    $font->size(35);
+                    $font->color($color);
+                    $font->align('left');
+                    $font->valign('bottom');
+                    $font->angle(45);
+                });
+
+                $img->save('storage/images/tmp/'.$name_img);
+
+            }
+    
+            $files = glob('storage/images/tmp/*');
+            
+            Madzipper::make('storage/test.zip')->add($files)->close();
+    
+            return response()->download('storage/test.zip');
+
+
+        } else {
+            return back()->with('error','A campanha não possui nenhum post associado.');
+        }
 
     }
 

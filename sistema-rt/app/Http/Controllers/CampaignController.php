@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Campaign;
 use App\Clinic;
+use App\Post;
+use App\CampaignPost;
+use Storage;
 
 class CampaignController extends Controller
 {
@@ -42,21 +45,41 @@ class CampaignController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'min:10', 'max:100'],
-            'description' => ['required', 'string', 'min:10', 'max:100']
+            'name' => ['required', 'string', 'max:100'],
+            'images.*' => ['required', 'image', 'mimes:jpeg,jpg,png,gif,svg|max:5000|dimensions:min_width=100,min_height=100,max_width=5000,max_height=5000'], 
         ],[
             'name.required' => 'O campo Nome é obrigatório.',
             'name.min' => 'Desculpe, mas o nome deve possuir no mínimo 10 caracteres.',
             'name.max' => 'Desculpe o nome excede o limite de caracteres.',
 
-            'description.required' => 'O campo Descrição é obrigatório.',
-            'description.min' => 'Desculpe, mas a descrição deve possuir no mínimo 10 caracteres.',
-            'description.max' => 'Desculpe a descrição excede o limite de caracteres.'
+            'images.*.required' => 'O campo Imagem é obrigatório.',
+            'images.*.mimes' => 'Somente arquivos de imagem são aceitos: jpeg, jpg, png, gif, svg.',
+            'images.*.max' => 'Somente são aceitas images de até 5MB.',
         ]);
 
-        Campaign::create($request->all());
+        $campaign = Campaign::create(['name' => $request->name]);
+            
+        // Verifica se informou o arquivo e se é válido
+         if ($request->hasFile('images')) 
+        {
+            foreach($request->file('images') as $image)
+            {
+                if($image->isValid())
+                {
+                    $post = Post::create(
+                        ['color' => $request->color, 'logo' => $request->logo, 'image' => $image->store('images')]
+                    );
 
-        return back()->with('success','Cadastro efetuado com sucesso!');
+                    CampaignPost::create(
+                        ['campaign_id' => $campaign->id, 'post_id' => $post->id]
+                    );
+
+                    unset($image);
+                }
+            } 
+        }
+
+        return back()->with('success','Campanha cadastrada com sucesso!');
     }
 
     /**
@@ -118,6 +141,18 @@ class CampaignController extends Controller
      */
     public function destroy($id)
     {
+        $cp = CampaignPost::where('campaign_id', $id)->get();
+
+        $posts = $cp;
+        CampaignPost::where('campaign_id', $id)->delete();
+
+        foreach($posts as $p) {
+            $post = Post::find($p->id);
+            Storage::disk('public')->delete($post->image);
+            $post->delete();
+        }
+
+
         $campaign = Campaign::find($id); 
         $campaign->delete();
 

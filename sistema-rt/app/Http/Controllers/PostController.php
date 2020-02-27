@@ -25,8 +25,9 @@ class PostController extends Controller
         $campaigns = Campaign::all();
         $clinics_option = Clinic::all();
         $campaigns_option = Campaign::all();
+        $campaign_post = CampaignPost::all();
 
-        return view('posts', compact('posts','campaigns','clinics_option','campaigns_option'));
+        return view('posts', compact('posts','campaigns','clinics_option','campaigns_option','campaign_post'));
     }
 
     /**
@@ -50,7 +51,8 @@ class PostController extends Controller
         $request->validate([
             'name' => ['required', 'string'],
             'color' => ['required', 'string', 'max:100'],
-            'images.*' => ['required', 'image', 'mimes:jpeg,jpg,png,gif,svg|max:5000|dimensions:min_width=100,min_height=100,max_width=5000,max_height=5000']
+            'logo' => ['required', 'string', 'max:10'],
+            'image' => ['required', 'image', 'mimes:jpeg,jpg,png,gif,svg|max:5000|dimensions:min_width=100,min_height=100,max_width=5000,max_height=5000']
 
         ],[
             'color.required' => 'O campo Cor é obrigatório.',
@@ -58,37 +60,28 @@ class PostController extends Controller
             'name.required' => 'O campo Nome é obrigatório.',
             'name.max' => 'Desculpe o nome excede o limite de caracteres.',
             
-            'images.*.required' => 'O campo Imagem é obrigatório.',
-            'images.*.mimes' => 'Somente arquivos de imagem são aceitos: jpeg, jpg, png, gif, svg.',
-            'images.*.max' => 'Somente são aceitas images de até 5MB.'
+            'image.required' => 'O campo Imagem é obrigatório.',
+            'image.mimes' => 'Somente arquivos de imagem são aceitos: jpeg, jpg, png, gif, svg.',
+            'image.max' => 'Somente são aceitas images de até 5MB.'
         ]);
-            
-        $post = Post::create(
-            ['name' => $request->name, 'color' => $request->color]
-        );
+
+        // Verifica se informou o arquivo e se é válido
+        if ($request->hasFile('image')) 
+        {
+           
+            if($request->image->isValid())
+            {
+                $post = Post::create(
+                    ['name' => $request->name, 'color' => $request->color, 'logo' => $request->logo, 'image' => $request->image->store('images')]
+                );
+            }
+                unset($image);
+        }
 
         CampaignPost::create(
             ['campaign_id' => $request->campaign, 'post_id' => $post->id]
         );
     
-        // Verifica se informou o arquivo e se é válido
-        if ($request->hasFile('images')) 
-        {
-            foreach($request->file('images') as $image)
-            {
-                if($image->isValid())
-                {
-                    $new_image = Figure::create(
-                        ['path' => $image->store('images')]
-                    );
-
-                    PostImage::create(
-                        ['post_id' => $post->id, 'figure_id' => $new_image->id]
-                    );
-                }
-                unset($image);
-            }
-        }
 
         return back()->with('success','Cadastro efetuado com sucesso!');
     }
@@ -110,32 +103,6 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $post = Post::find($id);
-        $campaigns = Campaign::all();
-
-        $clinics_option = Clinic::all();
-        $campaigns_option = Campaign::all();
-
-        $post_images = PostImage::where('post_id', $id)->get();
-
-        $images_id = [];
-
-        foreach($post_images as $post_image) {
-            $images_id[] =  $post_image->figure_id;
-        }
-
-        $images = [];
-
-        foreach($images_id as $image_id) {
-            $images[] = Figure::find($image_id);
-        }
-
-        $campaign_post = CampaignPost::where('post_id', $id)->first();
-        
-        return view('editpost', compact('post','campaign_post','campaigns','images','clinics_option','campaigns_option'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -147,20 +114,31 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => ['required', 'string', 'min:4', 'max:100'],
-            'color' => ['required', 'string', 'min:4', 'max:100'],
+            'name' => ['string', 'max:100'],
+            'color' => ['string', 'max:100'],
         ],[
-            'name.required' => 'O campo Nome é obrigatório.',
-            'name.min' => 'Desculpe, mas o nome deve possuir no mínimo 10 caracteres.',
-            'name.max' => 'Desculpe o nome excede o limite de caracteres.',
-
-            'color.required' => 'O campo Cor é obrigatório.'
+            'name.max' => 'Desculpe o nome excede o limite de caracteres.'
         ]);
         
         $post = Post::find($id);
-        $post->update(
-            ['name' => $request->name, 'color' => $request->color]
-        );
+
+        // Verifica se informou o arquivo e se é válido
+        if ($request->hasFile('image')) 
+        {
+           
+            if($request->image->isValid())
+            {
+                $post->update(
+                    ['color' => $request->color, 'logo' => $request->logo, 'image' => $request->image->store('images')]
+                );
+            }
+                unset($image);
+        } else {
+            
+            $post->update(
+                ['color' => $request->color, 'logo' => $request->logo]
+            );
+        }
 
         $campaign_post = CampaignPost::where('post_id', $id)->first();
         $campaign_post->campaign_id = $request->campaign;

@@ -43,10 +43,10 @@ class ClinicController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'min:10', 'max:100'],
-            'clinic_record' => ['required', 'string', 'min:10', 'max:100'],
-            'technical_manager' => ['required', 'string', 'min:10', 'max:100'],
-            'professional_record' => ['required', 'string', 'min:10', 'max:100']
+            'name' => ['required', 'string', 'max:100'],
+            'clinic_record' => ['required', 'string', 'max:100'],
+            'technical_manager' => ['required', 'string', 'max:100'],
+            'professional_record' => ['required', 'string', 'max:100']
         ],[
             'name.required' => 'O campo Nome é obrigatório.',
             'name.min' => 'Desculpe, mas o nome deve possuir no mínimo 10 caracteres.',
@@ -103,10 +103,10 @@ class ClinicController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => ['required', 'string', 'min:5', 'max:100'],
-            'clinic_record' => ['required', 'string', 'min:5', 'max:100'],
-            'technical_manager' => ['required', 'string', 'min:5', 'max:100'],
-            'professional_record' => ['required', 'string', 'min:5', 'max:100']
+            'name' => ['required', 'string', 'max:100'],
+            'clinic_record' => ['required', 'string', 'max:100'],
+            'technical_manager' => ['required', 'string', 'max:100'],
+            'professional_record' => ['required', 'string', 'max:100']
         ],[
             'name.required' => 'O campo Nome é obrigatório.',
             'name.min' => 'Desculpe, mas o nome deve possuir no mínimo 10 caracteres.',

@@ -29,39 +29,13 @@
                         <tr>
                             <td id="campaign_name_{{ $campaign->id }}">{{ $campaign->name }}</td>
                             <td>
-                                <!-- Modal Edit --> 
-                                <div class="modal fade" id="modalEdit{{ $campaign->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Cadastro</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="{{ route('campaigns.update', $campaign->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
-                                                        <label>Nome</label>
-                                                        <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ $campaign->name }}" minlength="10" maxlength="50" required>
-                                                        @if ($errors->has('name'))
-                                                        <span class="help-block">
-                                                            <strong>{{ $errors->first('name') }}</strong>
-                                                        </span>
-                                                        @endif
-                                                    </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary">Salvar</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#modalEdit{{ $campaign->id }}">Editar</button>
+                                <form action="{{ route('posts.index') }}" method="GET">
+                
+                                    <input type="hidden" name="id" value="{{ $campaign->id }}">
+                                  
+                                    <button type="submit" class="btn btn-primary">Editar</button>
+                                </form>
                             </td>
                             <td>
                                 <form action="{{ route('campaigns.destroy', $campaign->id) }}" method="POST">

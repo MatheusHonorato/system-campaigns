@@ -16,6 +16,27 @@
                     <h1 class="h2">Posts</h1>
                     <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
                 </div>
+
+                <div class="row pb-2 mb-3">
+                    <h1 class="h2 col-md-4">Nome</h1>
+                        <form class="col-md-3 pl-0" action="{{ route('campaigns.update', $campaign->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="mb-0 form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
+                                <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ $campaign->name }}" minlength="10" maxlength="50" required>
+                                @if ($errors->has('name'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </form>
+                    <div id="area-button-save-title-c" class="col-md-3 text-right pl-0 pr-4">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+
+                    </div>
+                </div>
+
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -67,20 +88,16 @@
                                                     <label>Campanha</label>
                                                     <select class="form-control" name="campaign">
                                                     @foreach($campaigns as $camp)
-                                                        @foreach($campaign_post as $cp)
-                                                            @if(($post->id == $cp->post_id) && ($cp->campaign_id == $camp->id))
-                                                                <option value="{{ $camp->id }}" selected>{{ $camp->name }}</option>
-                                                                @break
-                                                            @else
-                                                                <option value="{{ $camp->id }}">{{ $camp->name }}</option>
-                                                                @break
-                                                            @endif
-                                                        @endforeach
+                                                        @if($camp->id == $post->campaign_id)
+                                                            <option value="{{ $camp->id }}" selected>{{ $camp->name }}</option>
+                                                        @else
+                                                            <option value="{{ $camp->id }}">{{ $camp->name }}</option>
+                                                        @endif
                                                     @endforeach
                                                     </select>
-                                                    @if ($errors->has('campaign'))
+                                                    @if ($errors->has('campaigns'))
                                                     <span class="help-block">
-                                                        <strong>{{ $errors->first('campaign') }}</strong>
+                                                        <strong>{{ $errors->first('campaigns') }}</strong>
                                                     </span>
                                                     @endif
                                                 </div>
@@ -149,15 +166,6 @@
       <div class="modal-body">
         <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
-                <label>Nome</label>
-                <input type="text" class="form-control" name="name" placeholder="Nome" maxlength="50" required>
-                @if ($errors->has('name'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('name') }}</strong>
-                </span>
-                @endif
-            </div>
             <div class="form-group has-feedback {{ $errors->has('campaign') ? 'has-error' : '' }}">
                 <label>Campanha</label>
                 <select class="form-control" name="campaign" required>

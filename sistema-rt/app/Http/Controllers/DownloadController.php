@@ -13,6 +13,7 @@ use App\CampaignPost;
 use App\Post;
 use App\Color;
 use App\Clinic;
+use App\Campaign;
 
 class DownloadController extends Controller
 {
@@ -40,30 +41,47 @@ class DownloadController extends Controller
 
                 // open an image file
                 $img = Image::make('storage/'.$post->image);
-    
+
+                //width
+                $width = Image::make('storage/'.$post->image)->width();
+                //height
+                $height = Image::make('storage/'.$post->image)->height();
+
                 if($post->logo == 0) {
                     // and insert a watermark for example
-                    $img->insert('storage/'.$user->path_logo_one);
+                    $watermark = Image::make('storage/'.$user->path_logo_one);
                 } else {
-                     // and insert a watermark for example
-                     $img->insert('storage/'.$user->path_logo_two);
+                    $watermark = Image::make('storage/'.$user->path_logo_two);
+                    // and insert a watermark for example
                 }
                 
+                $watermark->resize(281, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });                
+
+                $img->insert($watermark, 'bottom-right', 50, 50);
+
+
                 $name_img = rand().'.jpg';
 
                 $color = $post->color;
 
-                $text_rt = $clinic->name." ".$clinic->clinic_record." ".$clinic->technical_manager." ".$clinic->professional_record;
+                $clinic_name_format = strtoupper($clinic->name);
 
-                $text_rt = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $text_rt ) ); 
+                $text_rt = $clinic_name_format."\n"."RC: ".$clinic->clinic_record."\n"."RT: ".$clinic->technical_manager."\n"."CRO: ".$clinic->professional_record;
 
-                $img->text($text_rt, 10/* x */, 885 /* y */, function($font) use ($color) {
-                    //$font->file('arial');
-                    $font->size(35);
+                //$text_rt = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $text_rt ) ); 
+
+                ini_set('default_charset', 'UTF-8');
+
+
+                $img->text($text_rt, 50/* x */, 1030 /* y */, function($font) use ($color) {
+                    $font->file(public_path('storage/fonts/calibri-7.ttf'));
+                    $font->size(14);
                     $font->color($color);
                     $font->align('left');
                     $font->valign('bottom');
-                    $font->angle(45);
+                    $font->angle(0);
                 });
 
                 $img->save('storage/images/tmp/'.$name_img);
@@ -71,10 +89,23 @@ class DownloadController extends Controller
             }
     
             $files = glob('storage/images/tmp/*');
+
+            function clean($string) {
+                $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+             
+                $string = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $string ) ); 
+
+                $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+                
+                return strtolower($string); // Removes special chars.
+             }             
+
+            $campaign = Campaign::find($request->campaign);
+            $name_zip = clean($campaign->name."-".$clinic_name_format);
             
-            Madzipper::make('storage/test.zip')->add($files)->close();
+            Madzipper::make('storage/'.$name_zip.'.zip')->add($files)->close();
     
-            return response()->download('storage/test.zip');
+            return response()->download('storage/'.$name_zip.'.zip');
 
 
         } else {

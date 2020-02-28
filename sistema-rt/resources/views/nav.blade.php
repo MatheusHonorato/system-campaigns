@@ -30,20 +30,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('posts.index') }}"
-
-                @if(explode('/', Request::url())[3] == 'posts')
-                    class="nav-link active"
-                @else
-                    class="nav-link"
-                @endif
-                
-                >
-                    <i class="fa fa-file-o fa-2x" aria-hidden="true"></i>
-                        Posts
-                </a>
-            </li>
-            <li class="nav-item">
                 <a  href="" class="nav-link" data-toggle="modal" data-target="#modallogo">
                     <i class="fa fa-eyedropper fa-2x" aria-hidden="true"></i>
                         Logo

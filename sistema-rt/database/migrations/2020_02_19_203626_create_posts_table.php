@@ -15,6 +15,8 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('campaign_id');
+            $table->foreign('campaign_id')->references('id')->on('campaigns');
             $table->integer('logo');
             $table->string('image');
             $table->string('color');
@@ -32,3 +34,5 @@ class CreatePostsTable extends Migration
         Schema::dropIfExists('posts');
     }
 }
+
+

@@ -53,15 +53,12 @@ class ClinicController extends Controller
             'name.max' => 'Desculpe o nome excede o limite de caracteres.',
 
             'clinic_record.required' => 'O campo Registro clínico é obrigatório.',
-            'clinic_record.min' => 'Desculpe, mas o campo Registro clínico deve possuir no mínimo 10 caracteres.',
             'clinic_record.max' => 'Desculpe o Registro clínico excede o limite de caracteres.',
 
             'technical_manager.required' => 'O campo Responsável técnico é obrigatório.',
-            'technical_manager.min' => 'Desculpe, mas o campo Responsável técnico deve possuir no mínimo 10 caracteres.',
             'technical_manager.max' => 'Desculpe o campo Responsável técnico excede o limite de caracteres.',
 
             'professional_record.required' => 'O campo Registro profissional é obrigatório.',
-            'professional_record.min' => 'Desculpe, mas o campo Registro profissional deve possuir no mínimo 10 caracteres.',
             'professional_record.max' => 'Desculpe o campo Registro profissional excede o limite de caracteres.'
 
         ]);

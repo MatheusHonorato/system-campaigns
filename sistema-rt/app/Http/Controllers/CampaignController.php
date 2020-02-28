@@ -67,7 +67,7 @@ class CampaignController extends Controller
                 if($image->isValid())
                 {
                     $post = Post::create(
-                        ['color' => $request->color, 'logo' => $request->logo, 'image' => $image->store('images')]
+                        ['color' => $request->color, 'logo' => $request->logo, 'campaign_id' => $campaign->id, 'image' => $image->store('images')]
                     );
 
                     CampaignPost::create(

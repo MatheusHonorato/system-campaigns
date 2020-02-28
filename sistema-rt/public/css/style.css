@@ -4,3 +4,11 @@
 #modallogo {
     padding-left: 0px !important;
 }
+
+@media (max-width: 800px) 
+{
+    #area-button-save-title-c {
+        text-align: center !important;
+        margin-top: 20px;
+    }
+}

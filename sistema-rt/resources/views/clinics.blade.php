@@ -45,7 +45,7 @@
                                                     @method('PATCH')
                                                     <div class="form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
                                                         <label>Nome</label>
-                                                        <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ $clinic->name }}" minlength="10" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ $clinic->name }}" maxlength="50" required>
                                                         @if ($errors->has('name'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('name') }}</strong>
@@ -54,7 +54,7 @@
                                                     </div>
                                                     <div class="form-group has-feedback {{ $errors->has('clinic_record') ? 'has-error' : '' }}">
                                                         <label>Registro clínico</label>
-                                                        <input type="text" class="form-control" name="clinic_record" placeholder="Registro clínico" value="{{ $clinic->clinic_record }}" minlength="10" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="clinic_record" placeholder="Registro clínico" value="{{ $clinic->clinic_record }}" maxlength="50" required>
                                                         @if ($errors->has('clinic_record'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('clinic_record') }}</strong>
@@ -63,7 +63,7 @@
                                                     </div>
                                                     <div class="form-group has-feedback {{ $errors->has('technical_manager') ? 'has-error' : '' }}">
                                                         <label>Responsável técnico</label>
-                                                        <input type="text" class="form-control" name="technical_manager" placeholder="Responsável técnico" value="{{ $clinic->technical_manager }}" minlength="10" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="technical_manager" placeholder="Responsável técnico" value="{{ $clinic->technical_manager }}" maxlength="50" required>
                                                         @if ($errors->has('technical_manager'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('technical_manager') }}</strong>
@@ -72,7 +72,7 @@
                                                     </div>
                                                     <div class="form-group has-feedback {{ $errors->has('professional_record') ? 'has-error' : '' }}">
                                                         <label>Registro profissional</label>
-                                                        <input type="text" class="form-control" name="professional_record" placeholder="Registro profissional" value="{{ $clinic->professional_record }}" minlength="10" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="professional_record" placeholder="Registro profissional" value="{{ $clinic->professional_record }}" maxlength="50" required>
                                                         @if ($errors->has('professional_record'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('professional_record') }}</strong>

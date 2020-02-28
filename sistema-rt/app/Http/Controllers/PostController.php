@@ -8,7 +8,6 @@ use App\Post;
 use App\Campaign;
 use App\CampaignPost;
 use App\Figure;
-use App\PostImage;
 use Storage;
 use App\Clinic;
 
@@ -19,15 +18,15 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::paginate(15);
+        $posts = Post::where('campaign_id', $request->id)->paginate(18);
         $campaigns = Campaign::all();
         $clinics_option = Clinic::all();
         $campaigns_option = Campaign::all();
-        $campaign_post = CampaignPost::all();
+        $campaign = Campaign::find($request->id);
 
-        return view('posts', compact('posts','campaigns','clinics_option','campaigns_option','campaign_post'));
+        return view('posts', compact('posts','campaign','campaigns','clinics_option','campaigns_option'));
     }
 
     /**
@@ -49,17 +48,14 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string'],
             'color' => ['required', 'string', 'max:100'],
+            'campaign' => ['required', 'string', 'max:100'],
             'logo' => ['required', 'string', 'max:10'],
             'image' => ['required', 'image', 'mimes:jpeg,jpg,png,gif,svg|max:5000|dimensions:min_width=100,min_height=100,max_width=5000,max_height=5000']
 
         ],[
             'color.required' => 'O campo Cor é obrigatório.',
-
-            'name.required' => 'O campo Nome é obrigatório.',
-            'name.max' => 'Desculpe o nome excede o limite de caracteres.',
-            
+            'campaign.required' => 'O campo Campanha é obrigatório.',
             'image.required' => 'O campo Imagem é obrigatório.',
             'image.mimes' => 'Somente arquivos de imagem são aceitos: jpeg, jpg, png, gif, svg.',
             'image.max' => 'Somente são aceitas images de até 5MB.'
@@ -72,7 +68,7 @@ class PostController extends Controller
             if($request->image->isValid())
             {
                 $post = Post::create(
-                    ['name' => $request->name, 'color' => $request->color, 'logo' => $request->logo, 'image' => $request->image->store('images')]
+                    ['color' => $request->color, 'logo' => $request->logo, 'campaign_id' => $request->campaign, 'image' => $request->image->store('images')]
                 );
             }
                 unset($image);
@@ -158,17 +154,10 @@ class PostController extends Controller
         $campaign_post = CampaignPost::where('post_id',$id)->first();
         $campaign_post->delete();
         
-        $post_figures = PostImage::where('post_id', $id)->get();
-
-        PostImage::where('post_id', $id)->delete();
-
-        foreach($post_figures as $pf) {
-            $figure = Figure::find($pf->figure_id);
-            Storage::disk('public')->delete($figure->path);
-            $figure->delete();
-        }
-
         $post = Post::find($id);
+
+        Storage::disk('public')->delete($post->image);
+
         $post->delete();
 
         return redirect()->back()->with('success','Post excluído com sucesso!');

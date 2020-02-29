@@ -20,8 +20,8 @@
             <script src="https://use.fontawesome.com/60f53529f3.js"></script>
 </head>
 <body>
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+        <nav class="navbar navbar-expand-md navbar-dark bg-white shadow-sm">
+            <div id="c-nav" class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
@@ -71,8 +71,11 @@
             </div>
         </nav>
 
-        @yield('content')
-
+        <div class="container-fluid">
+            <div class="row" id="geral-row">
+                @yield('content')
+            </div>
+        </div>
        
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>

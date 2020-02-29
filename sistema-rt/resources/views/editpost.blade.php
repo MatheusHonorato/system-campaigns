@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
+
         @include('nav')
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="col-md-11">
@@ -78,8 +77,7 @@
                 </table>
             </div>
         </main>
-    </div>
-</div>
+   
 @include('logo')
 @include('download')
 @endsection

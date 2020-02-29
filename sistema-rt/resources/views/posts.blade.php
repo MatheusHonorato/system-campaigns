@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
+
         @include('nav')
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="col-md-11">
@@ -129,7 +128,7 @@
                                                     @else 
                                                         <img src="{{ route('welcome') }}/storage/images/default.png">
                                                     @endif
-                                                    <input type="file" name="image" placeholder="Image">
+                                                    <input class="mt-3" type="file" name="image" placeholder="Image">
                                                     @if ($errors->has('image'))
                                                     <span class="help-block">
                                                         <strong>{{ $errors->first('image') }}</strong>
@@ -150,8 +149,7 @@
                 {{ $posts->links() }}
             </div>
         </main>
-    </div>
-</div>
+  
 
 <!-- Modal -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">

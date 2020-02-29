@@ -20,7 +20,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $posts = Post::where('campaign_id', $request->id)->paginate(18);
+        $posts = Post::where('campaign_id', $request->id)->paginate(30);
         $campaigns = Campaign::all();
         $clinics_option = Clinic::all();
         $campaigns_option = Campaign::all();

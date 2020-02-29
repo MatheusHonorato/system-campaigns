@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        @include('nav')
+
+@include('nav')
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="col-md-11">
                 @if ($message = Session::get('success'))
@@ -51,8 +50,7 @@
                 {{ $campaigns->links() }}
             </div>
         </main>
-    </div>
-</div>
+    
 
 <!-- Modal New --> 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">

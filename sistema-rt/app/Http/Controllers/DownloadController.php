@@ -70,13 +70,10 @@ class DownloadController extends Controller
 
                 $text_rt = $clinic_name_format."\n"."RC: ".$clinic->clinic_record."\n"."RT: ".$clinic->technical_manager."\n"."CRO: ".$clinic->professional_record;
 
-                //$text_rt = preg_replace( '/[`^~\'"]/', null, iconv( 'UTF-8', 'ASCII//TRANSLIT', $text_rt ) ); 
-
                 ini_set('default_charset', 'UTF-8');
 
-
-                $img->text($text_rt, 50/* x */, 1030 /* y */, function($font) use ($color) {
-                    $font->file(public_path('storage/fonts/calibri-7.ttf'));
+                $img->text($text_rt, 50/* x */, $height-50 /* y */, function($font) use ($color) {
+                    $font->file(public_path('storage/fonts/calibri-bold-2.ttf'));
                     $font->size(14);
                     $font->color($color);
                     $font->align('left');

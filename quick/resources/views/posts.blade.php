@@ -39,7 +39,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
+                            <th scope="col">Miniatura</th>
                             <th scope="col" class="text-center">Editar</th>
                             <th scope="col" class="text-center">Excluir</th>
                         </tr>
@@ -47,7 +47,13 @@
                     <tbody>
                         @foreach($posts as $post)
                         <tr>
-                            <td id="post_name_{{ $post->id }}">{{ $post->id }}</td>
+                            <td id="post_name_{{ $post->id }}">
+                            @if($post->image != '') 
+                                <img src="{{ route('welcome') }}/storage/{{ $post->image }}" width="100px">
+                            @else 
+                                <img src="{{ route('welcome') }}/storage/images/default.png">
+                            @endif
+                            </td>
                             <td class="text-center">
                                 <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary ">Editar</<a>
                             </td>

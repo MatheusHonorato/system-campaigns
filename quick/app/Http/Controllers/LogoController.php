@@ -46,7 +46,7 @@ class LogoController extends Controller
                 if($user->path_logo_one != '') {
                     Storage::disk('public')->delete($user->path_logo_one);
                 }
-                $user->path_logo_one = $request->file('logo_one')->store('images');
+                $user->path_logo_one = $request->file('logo_one')->store('images/logos');
                 $user->save();
             }
             
@@ -61,7 +61,7 @@ class LogoController extends Controller
                 if($user->path_logo_two != '') {
                     Storage::disk('public')->delete($user->path_logo_two);
                 }
-                $user->path_logo_two = $request->file('logo_two')->store('images');
+                $user->path_logo_two = $request->file('logo_two')->store('images/logos');
                 $user->save();
             }
             

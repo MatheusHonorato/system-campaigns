@@ -52,7 +52,7 @@
                                 <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary ">Editar</<a>
                             </td>
                             <td class="text-center">
-                                <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                                <form class="delete-p" action="{{ route('posts.destroy', $post->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger">Excluir</button>

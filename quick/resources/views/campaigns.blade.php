@@ -3,6 +3,7 @@
 @section('content')
 
 @include('nav')
+
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="col-md-11">
                 @if ($message = Session::get('success'))
@@ -37,10 +38,10 @@
                                 </form>
                             </td>
                             <td>
-                                <form action="{{ route('campaigns.destroy', $campaign->id) }}" method="POST">
+                                <form class="delete-c" action="{{ route('campaigns.destroy', $campaign->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger">Excluir</button>
+                                    <button type="submit" class="btn btn-danger">Excluir</button>
                                 </form>
                             </td>
                         </tr>
@@ -112,6 +113,7 @@
     </div>
   </div>
 </div>
+
 @include('logo')
 @include('download')
 @endsection

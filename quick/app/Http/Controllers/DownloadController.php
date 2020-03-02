@@ -26,7 +26,7 @@ class DownloadController extends Controller
     {
 
         array_map('unlink', glob('storage/images/tmp/*.jpg'));
-        array_map('unlink', glob('storage/*.zip'));
+        //array_map('unlink', glob('storage/*.zip'));
 
         $campaign_posts = CampaignPost::where('campaign_id', $request->campaign)->get();
         $clinic = Clinic::find($request->clinic);
@@ -102,7 +102,7 @@ class DownloadController extends Controller
             
             Madzipper::make('storage/'.$name_zip.'.zip')->add($files)->close();
     
-            return response()->download('storage/'.$name_zip.'.zip');
+            return response()->download('storage/'.$name_zip.'.zip')->deleteFileAfterSend(true);
 
 
         } else {

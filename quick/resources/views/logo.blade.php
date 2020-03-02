@@ -17,7 +17,7 @@
                         @if(auth()->user()->path_logo_one != '') 
                           <img src="{{ route('welcome') }}/storage/{{ auth()->user()->path_logo_one }}" width="100%">
                         @else 
-                          <img src="{{ route('welcome') }}/storage/images/default.png">
+                          <img src="{{ route('welcome') }}/storage/images/logos/default.png">
                         @endif
                     </div>
                     <div class="col-md-12 text-center mt-3">
@@ -35,7 +35,7 @@
                         @if(auth()->user()->path_logo_two != '') 
                           <img src="{{ route('welcome') }}/storage/{{ auth()->user()->path_logo_two }}" width="100%">
                         @else 
-                          <img src="{{ route('welcome') }}/storage/images/default.png">
+                          <img src="{{ route('welcome') }}/storage/images/logos/default.png">
                         @endif
                     </div>
                     <div class="col-md-12 text-center mt-3">

@@ -78,7 +78,18 @@
         </div>
        
         <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('js/jquery-3.4.1.slim.min.js') }}"></script>
+
+        <script src="{{ asset('js/app.js') }}"></script>  
+
+        <script>
+            $(".delete-c").on("submit", function(){
+                return confirm("Deseja remover esta campanha?");
+            });
+            $(".delete-p").on("submit", function(){
+                return confirm("Deseja remover este post?");
+            });
+        </script>
 
 </body>
 </html>

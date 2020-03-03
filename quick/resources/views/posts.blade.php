@@ -13,11 +13,14 @@
                 @endif
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Posts</h1>
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                    @if(Auth::user()->type_user == 0)
+                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                    @endif
                 </div>
 
                 <div class="row pb-2 mb-3">
-                    <h1 class="h2 col-md-4">Nome</h1>
+                    @if(Auth::user()->type_user == 0)
+                        <h1 class="h2 col-md-4">Nome</h1>
                         <form class="col-md-3 pl-0" action="{{ route('campaigns.update', $campaign->id) }}" method="POST">
                             @csrf
                             @method('PUT')
@@ -30,18 +33,25 @@
                                 @endif
                             </div>
                         </form>
-                    <div id="area-button-save-title-c" class="col-md-3 text-right pl-0 pr-4">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-
+                        <div id="area-button-save-title-c" class="col-md-3 text-right pl-0 pr-4">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    @else
+                        <h1 class="h2 col-md-4">Campanha: {{ $campaign->name }}</h1>
+                    @endif
                     </div>
                 </div>
-
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Miniatura</th>
-                            <th scope="col" class="text-center">Editar</th>
-                            <th scope="col" class="text-center">Excluir</th>
+                            @if(Auth::user()->type_user == 0)
+                                <th scope="col" class="text-center">Editar</th>
+                            @else
+                                <th scope="col" class="text-center">Visualizar</th>
+                            @endif
+                            @if(Auth::user()->type_user == 0)
+                                <th scope="col" class="text-center">Excluir</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -54,16 +64,24 @@
                                 <img src="{{ route('welcome') }}/storage/images/default.png">
                             @endif
                             </td>
-                            <td class="text-center">
-                                <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary ">Editar</<a>
-                            </td>
-                            <td class="text-center">
-                                <form class="delete-p" action="{{ route('posts.destroy', $post->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger">Excluir</button>
-                                </form>
-                            </td>
+                            @if(Auth::user()->type_user == 0)
+                                <td class="text-center">
+                                    <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary ">Editar</<a>
+                                </td> 
+                            @else
+                                <td class="text-center">
+                                    <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary ">Visualizar</<a>
+                                </td>  
+                            @endif
+                            @if(Auth::user()->type_user == 0)
+                                <td class="text-center">
+                                    <form class="delete-p" action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger">Excluir</button>
+                                    </form>
+                                </td>
+                            @endif
                         </tr>
 
                          <!-- Modal -->
@@ -71,7 +89,11 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                                            @if(Auth::user()->type_user == 0)
+                                                <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+                                            @else
+                                                <h5 class="modal-title" id="exampleModalLabel">Visualizar</h5>
+                                            @endif
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                             </button>
@@ -91,7 +113,13 @@
                                                 </div>
                                                 <div class="form-group has-feedback {{ $errors->has('campaign') ? 'has-error' : '' }}">
                                                     <label>Campanha</label>
-                                                    <select class="form-control" name="campaign">
+                                                    <select class="form-control" name="campaign" 
+                                                    
+                                                    @if(Auth::user()->type_user != 0)
+                                                        disabled
+                                                    @endif
+
+                                                    >
                                                     @foreach($campaigns as $camp)
                                                         @if($camp->id == $post->campaign_id)
                                                             <option value="{{ $camp->id }}" selected>{{ $camp->name }}</option>
@@ -108,7 +136,13 @@
                                                 </div>
                                                 <div class="form-group has-feedback {{ $errors->has('logo') ? 'has-error' : '' }}">
                                                     <label>Logo</label>
-                                                    <select class="form-control" name="logo">
+                                                    <select class="form-control" name="logo"
+                                                    
+                                                    @if(Auth::user()->type_user != 0)
+                                                        disabled
+                                                    @endif
+
+                                                    >
                                                         <option value="0" @if($post->logo == '0') selected  @endif>Original</option>
                                                         <option value="1" @if($post->logo == '1') selected  @endif>Transparente</option>
                                                     </select>
@@ -120,7 +154,13 @@
                                                 </div>
                                                 <div class="form-group has-feedback {{ $errors->has('color') ? 'has-error' : '' }}">
                                                     <label>Cor dos dados técnicos</label>
-                                                    <input type="color" class="form-control" name="color" placeholder="Cor" value="{{ $post->color }}" maxlength="50">
+                                                    <input type="color" class="form-control" name="color" placeholder="Cor" value="{{ $post->color }}" maxlength="50"
+                                                    
+                                                    @if(Auth::user()->type_user != 0)
+                                                        disabled
+                                                    @endif
+
+                                                    >
                                                     @if ($errors->has('color'))
                                                     <span class="help-block">
                                                         <strong>{{ $errors->first('color') }}</strong>
@@ -134,16 +174,22 @@
                                                     @else 
                                                         <img src="{{ route('welcome') }}/storage/images/default.png">
                                                     @endif
-                                                    <input class="mt-3" type="file" name="image" placeholder="Image">
-                                                    @if ($errors->has('image'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('image') }}</strong>
-                                                    </span>
+
+                                                    @if(Auth::user()->type_user == 0)
+                                                        <input class="mt-3" type="file" name="image" placeholder="Image">
+                                                        @if ($errors->has('image'))
+                                                        <span class="help-block">
+                                                            <strong>{{ $errors->first('image') }}</strong>
+                                                        </span>
+                                                        @endif
                                                     @endif
+
                                                 </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Salvar</button>
+                                            @if(Auth::user()->type_user == 0)
+                                                <button type="submit" class="btn btn-primary">Salvar</button>
+                                            @endif
                                             </form>
                                         </div>
                                         </div>

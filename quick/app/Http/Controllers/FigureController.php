@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\PostImage;
 use App\Figure;
 use Storage;
+use Auth;
 
 class FigureController extends Controller
 {
@@ -82,12 +83,17 @@ class FigureController extends Controller
      */
     public function destroy($id)
     {
-        $figure = Figure::find($id);
-        $post_figure = PostImage::where('figure_id', $id)->first();
-        $post_figure->delete();
-        Storage::disk('public')->delete($figure->path);
-        $figure->delete();
-
-        return redirect()->back()->with('success','Imagem excluída com sucesso!');
+        if(Auth::user()->type_user == 0) {
+            $figure = Figure::find($id);
+            $post_figure = PostImage::where('figure_id', $id)->first();
+            $post_figure->delete();
+            Storage::disk('public')->delete($figure->path);
+            $figure->delete();
+    
+            return redirect()->back()->with('success','Imagem excluída com sucesso!');
+        } else {
+            return back()->with('error','Usuário não autorizado.');
+        }
+     
     }
 }

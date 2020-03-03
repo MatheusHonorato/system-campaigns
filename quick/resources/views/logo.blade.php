@@ -20,14 +20,16 @@
                           <img src="{{ route('welcome') }}/storage/images/logos/default.png">
                         @endif
                     </div>
-                    <div class="col-md-12 text-center mt-3">
-                        <input type="file" name="logo_one" placeholder="Imagens">
-                        @if ($errors->has('images'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('images') }}</strong>
-                        </span>
-                        @endif
-                    </div>
+                    @if(Auth::user()->type_user == 0)
+                      <div class="col-md-12 text-center mt-3">
+                          <input type="file" name="logo_one" placeholder="Imagens">
+                          @if ($errors->has('images'))
+                          <span class="help-block">
+                              <strong>{{ $errors->first('images') }}</strong>
+                          </span>
+                          @endif
+                      </div>
+                    @endif
                 </div>
                 <div class="form-group has-feedback {{ $errors->has('logos') ? 'has-error' : '' }}">
                     <label class="col-md-12 text-center">Versão 2</label>
@@ -38,18 +40,22 @@
                           <img src="{{ route('welcome') }}/storage/images/logos/default.png">
                         @endif
                     </div>
-                    <div class="col-md-12 text-center mt-3">
-                        <input type="file" name="logo_two" placeholder="Imagens">
-                        @if ($errors->has('images'))
-                        <span class="help-block">
-                            <strong>{{ $errors->first('images') }}</strong>
-                        </span>
-                        @endif
-                    </div>
+                    @if(Auth::user()->type_user == 0)
+                      <div class="col-md-12 text-center mt-3">
+                          <input type="file" name="logo_two" placeholder="Imagens">
+                          @if ($errors->has('images'))
+                          <span class="help-block">
+                              <strong>{{ $errors->first('images') }}</strong>
+                          </span>
+                          @endif
+                      </div>
+                    @endif
                 </div>
         </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        @if(Auth::user()->type_user == 0)
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        @endif
         </form>
       </div>
     </div>

@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Campanhas') }}</title>
+    <title>{{ config('app.name', 'Quick') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -16,14 +16,14 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-            <!-- Icons -->
-            <script src="https://use.fontawesome.com/60f53529f3.js"></script>
+    <!-- Icons -->
+    <script src="https://use.fontawesome.com/60f53529f3.js"></script>
 </head>
 <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-white shadow-sm">
             <div id="c-nav" class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                <a class="navbar-brand" href="{{ url('/campanhas') }}">
+                    {{ config('app.name', 'Quick') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -88,6 +88,9 @@
             });
             $(".delete-p").on("submit", function(){
                 return confirm("Deseja remover este post?");
+            });
+            $(".delete-cl").on("submit", function(){
+                return confirm("Deseja remover esta clínica?");
             });
         </script>
 

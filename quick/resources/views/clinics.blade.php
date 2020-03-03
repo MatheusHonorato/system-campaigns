@@ -13,14 +13,22 @@
                 @endif
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Clínicas</h1>
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                    @if(Auth::user()->type_user == 0)
+                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                    @endif
                 </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Nome</th>
-                            <th scope="col">Editar</th>
-                            <th scope="col">Excluir</th>
+                            @if(Auth::user()->type_user == 0)
+                                <th scope="col">Editar</th>
+                            @else
+                                <th scope="col">Visualizar</th>
+                            @endif
+                            @if(Auth::user()->type_user == 0)
+                                <th scope="col">Excluir</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +52,13 @@
                                                     @method('PATCH')
                                                     <div class="form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
                                                         <label>Nome</label>
-                                                        <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ $clinic->name }}" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ $clinic->name }}" maxlength="50" required
+                                                        
+                                                        @if(Auth::user()->type_user != 0)
+                                                            disabled
+                                                        @endif
+
+                                                        >
                                                         @if ($errors->has('name'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('name') }}</strong>
@@ -53,7 +67,13 @@
                                                     </div>
                                                     <div class="form-group has-feedback {{ $errors->has('clinic_record') ? 'has-error' : '' }}">
                                                         <label>Registro clínico</label>
-                                                        <input type="text" class="form-control" name="clinic_record" placeholder="Registro clínico" value="{{ $clinic->clinic_record }}" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="clinic_record" placeholder="Registro clínico" value="{{ $clinic->clinic_record }}" maxlength="50" required
+                                                        
+                                                        @if(Auth::user()->type_user != 0)
+                                                            disabled
+                                                        @endif
+
+                                                        >
                                                         @if ($errors->has('clinic_record'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('clinic_record') }}</strong>
@@ -62,7 +82,13 @@
                                                     </div>
                                                     <div class="form-group has-feedback {{ $errors->has('technical_manager') ? 'has-error' : '' }}">
                                                         <label>Responsável técnico</label>
-                                                        <input type="text" class="form-control" name="technical_manager" placeholder="Responsável técnico" value="{{ $clinic->technical_manager }}" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="technical_manager" placeholder="Responsável técnico" value="{{ $clinic->technical_manager }}" maxlength="50" required
+                                                        
+                                                        @if(Auth::user()->type_user != 0)
+                                                            disabled
+                                                        @endif
+
+                                                        >
                                                         @if ($errors->has('technical_manager'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('technical_manager') }}</strong>
@@ -71,7 +97,13 @@
                                                     </div>
                                                     <div class="form-group has-feedback {{ $errors->has('professional_record') ? 'has-error' : '' }}">
                                                         <label>Registro profissional</label>
-                                                        <input type="text" class="form-control" name="professional_record" placeholder="Registro profissional" value="{{ $clinic->professional_record }}" maxlength="50" required>
+                                                        <input type="text" class="form-control" name="professional_record" placeholder="Registro profissional" value="{{ $clinic->professional_record }}" maxlength="50" required
+                                                        
+                                                        @if(Auth::user()->type_user != 0)
+                                                            disabled
+                                                        @endif
+
+                                                        >
                                                         @if ($errors->has('professional_record'))
                                                         <span class="help-block">
                                                             <strong>{{ $errors->first('professional_record') }}</strong>
@@ -80,22 +112,29 @@
                                                     </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary">Salvar</button>
+                                                @if(Auth::user()->type_user == 0)
+                                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                                @endif
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#modalEdit{{ $clinic->id }}">Editar</button>
+                                @if(Auth::user()->type_user == 0)
+                                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#modalEdit{{ $clinic->id }}">Editar</button>
+                                @else
+                                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#modalEdit{{ $clinic->id }}">Visualizar</button>
+                                @endif
                             </td>
+                            @if(Auth::user()->type_user == 0)
                             <td>
-                                <form action="{{ route('clinics.destroy', $clinic->id) }}" method="POST">
+                                <form class="delete-cl" action="{{ route('clinics.destroy', $clinic->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger">Excluir</button>
                                 </form>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

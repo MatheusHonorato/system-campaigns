@@ -14,14 +14,18 @@
                 @endif
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Campanhas</h1>
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                    @if(Auth::user()->type_user == 0)
+                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                    @endif
                 </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Nome</th>
-                            <th scope="col">Editar</th>
-                            <th scope="col">Excluir</th>
+                            <th scope="col">Acessar</th>
+                            @if(Auth::user()->type_user == 0)
+                                <th scope="col">Excluir</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -34,9 +38,10 @@
                 
                                     <input type="hidden" name="id" value="{{ $campaign->id }}">
                                   
-                                    <button type="submit" class="btn btn-primary">Editar</button>
+                                    <button type="submit" class="btn btn-primary">Acessar</button>
                                 </form>
                             </td>
+                            @if(Auth::user()->type_user == 0)
                             <td>
                                 <form class="delete-c" action="{{ route('campaigns.destroy', $campaign->id) }}" method="POST">
                                     @csrf
@@ -44,6 +49,7 @@
                                     <button type="submit" class="btn btn-danger">Excluir</button>
                                 </form>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

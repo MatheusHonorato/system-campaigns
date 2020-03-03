@@ -37,36 +37,40 @@ class LogoController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile('logo_one')) 
-        {
-           
-            if($request->file('logo_one')->isValid())
+        if(Auth::user()->type_user == 0) {
+            if ($request->hasFile('logo_one')) 
             {
-                $user = User::find(Auth::user()->id);
-                if($user->path_logo_one != '') {
-                    Storage::disk('public')->delete($user->path_logo_one);
+               
+                if($request->file('logo_one')->isValid())
+                {
+                    $user = User::find(Auth::user()->id);
+                    if($user->path_logo_one != '') {
+                        Storage::disk('public')->delete($user->path_logo_one);
+                    }
+                    $user->path_logo_one = $request->file('logo_one')->store('images/logos');
+                    $user->save();
                 }
-                $user->path_logo_one = $request->file('logo_one')->store('images/logos');
-                $user->save();
+                
             }
-            
-        }
-
-        if ($request->hasFile('logo_two')) 
-        {
-           
-            if($request->file('logo_two')->isValid())
+    
+            if ($request->hasFile('logo_two')) 
             {
-                $user = User::find(Auth::user()->id);
-                if($user->path_logo_two != '') {
-                    Storage::disk('public')->delete($user->path_logo_two);
+               
+                if($request->file('logo_two')->isValid())
+                {
+                    $user = User::find(Auth::user()->id);
+                    if($user->path_logo_two != '') {
+                        Storage::disk('public')->delete($user->path_logo_two);
+                    }
+                    $user->path_logo_two = $request->file('logo_two')->store('images/logos');
+                    $user->save();
                 }
-                $user->path_logo_two = $request->file('logo_two')->store('images/logos');
-                $user->save();
+                
             }
-            
+            return back()->with('success','Logo atualizada com sucesso!');
+        } else {
+            return back()->with('error','Usuário não autorizado.');
         }
-        return back()->with('success','Logo atualizada com sucesso!');
     }
 
     /**

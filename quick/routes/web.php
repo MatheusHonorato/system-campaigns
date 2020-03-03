@@ -31,7 +31,5 @@ Route::middleware('auth')->group(function () {
     Route::get('download', 'DownloadController@index')->name('download');
 
     Route::get('register', 'Auth\RegisterController@register');
-
 });
-
 

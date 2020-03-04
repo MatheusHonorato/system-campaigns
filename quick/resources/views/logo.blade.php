@@ -54,7 +54,7 @@
         </div>
       <div class="modal-footer">
         @if(Auth::user()->type_user == 0)
-          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
         @endif
         </form>
       </div>

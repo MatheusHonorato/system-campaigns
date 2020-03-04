@@ -4,7 +4,7 @@
 
         @include('nav')
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="col-md-11">
+            <div class="col-md-12">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <button type="button" class="close" data-dismiss="alert">×</button>
@@ -14,7 +14,8 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Posts</h1>
                     @if(Auth::user()->type_user == 0)
-                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+ Novo</button>
                     @endif
                 </div>
 
@@ -34,9 +35,11 @@
                             </div>
                         </form>
                         <div id="area-button-save-title-c" class="col-md-3 text-right pl-0 pr-4">
-                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
                     @else
-                        <h1 class="h2 col-md-4">Campanha: {{ $campaign->name }}</h1>
+                                            <div id="area-button-save-title-c" class="col-md-12 text-left pl-0 pr-4">
+
+                        <h1 class="h2 col-md-12">Campanha: {{ $campaign->name }}</h1>
                     @endif
                     </div>
                 </div>
@@ -44,6 +47,8 @@
                     <thead>
                         <tr>
                             <th scope="col">Miniatura</th>
+                            <th scope="col" class="text-center">Logo</th>
+                            <th scope="col" class="text-center">Cor</th>
                             @if(Auth::user()->type_user == 0)
                                 <th scope="col" class="text-center">Editar</th>
                             @else
@@ -64,13 +69,25 @@
                                 <img src="{{ route('welcome') }}/storage/images/default.png">
                             @endif
                             </td>
+                            <td class="text-center">
+                            @if($post->logo == 0) 
+                                <img src="{{ route('welcome') }}/storage/{{ $logo_one }}" width="100px">
+                            @else 
+                                <img src="{{ route('welcome') }}/storage/{{ $logo_two }}" width="100px">
+                            @endif
+                            </td>
+                            <td class="text-center">
+                                <div style="background-color: {{ $post->color }}; cursor: auto;" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="{{ $post->color }}">
+                                    {{ $post->color }}
+                                </div>
+                            </td>
                             @if(Auth::user()->type_user == 0)
                                 <td class="text-center">
-                                    <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary ">Editar</<a>
+                                    <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary "><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</<a>
                                 </td> 
                             @else
                                 <td class="text-center">
-                                    <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary ">Visualizar</<a>
+                                    <a href="" data-toggle="modal" data-target="#modalEdit{{ $post->id }}" class="btn btn-primary "><i class="fa fa-sign-in" aria-hidden="true"></i> Visualizar</<a>
                                 </td>  
                             @endif
                             @if(Auth::user()->type_user == 0)
@@ -78,7 +95,7 @@
                                     <form class="delete-p" action="{{ route('posts.destroy', $post->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-danger">Excluir</button>
+                                        <button class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i> Excluir</button>
                                     </form>
                                 </td>
                             @endif
@@ -188,7 +205,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             @if(Auth::user()->type_user == 0)
-                                                <button type="submit" class="btn btn-primary">Salvar</button>
+                                                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
                                             @endif
                                             </form>
                                         </div>
@@ -261,7 +278,7 @@
             </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
         </form>
       </div>
     </div>
@@ -270,3 +287,5 @@
 @include('logo')
 @include('download')
 @endsection
+
+

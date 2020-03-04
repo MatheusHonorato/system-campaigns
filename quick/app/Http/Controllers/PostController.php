@@ -11,6 +11,7 @@ use App\Figure;
 use Storage;
 use App\Clinic;
 use Auth;
+use App\User;
 
 class PostController extends Controller
 {
@@ -27,7 +28,11 @@ class PostController extends Controller
         $campaigns_option = Campaign::all();
         $campaign = Campaign::find($request->id);
 
-        return view('posts', compact('posts','campaign','campaigns','clinics_option','campaigns_option'));
+        $user = User::find(1);
+        $logo_one = $user->path_logo_one;
+        $logo_two = $user->path_logo_two;
+
+        return view('posts', compact('logo_one','logo_two','posts','campaign','campaigns','clinics_option','campaigns_option'));
     }
 
     /**
@@ -96,6 +101,13 @@ class PostController extends Controller
     public function show($id)
     {
         //
+    }
+
+    public function list_filter($id)
+    {
+        $posts = Post::where('campaign_id', $id)->get();
+
+        return $posts;
     }
 
     /**

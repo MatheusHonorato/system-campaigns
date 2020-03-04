@@ -24,84 +24,85 @@ class DownloadController extends Controller
      */
     public function index(Request $request)
     {
-
         array_map('unlink', glob('storage/images/tmp/*.jpg'));
-        //array_map('unlink', glob('storage/*.zip'));
 
-        $campaign_posts = CampaignPost::where('campaign_id', $request->campaign)->get();
+        $posts = Post::where('campaign_id', $request->campaign)->get();
         $clinic = Clinic::find($request->clinic);
         
-        if(count($campaign_posts) > 0) {
+        if(count($posts) > 0) {
 
             $user = User::find(1);
             
             $count = 1;
 
-            foreach($campaign_posts as $cp) {
-    
-                $post = Post::find($cp->post_id);
-
-                // open an image file
-                $img = Image::make('storage/'.$post->image);
-
-                //width
-                $width = Image::make('storage/'.$post->image)->width();
-                //height
-                $height = Image::make('storage/'.$post->image)->height();
-
-                if($post->logo == 0) {
-                    // and insert a watermark for example
-                    $watermark = Image::make('storage/'.$user->path_logo_one);
-                } else {
-                    $watermark = Image::make('storage/'.$user->path_logo_two);
-                    // and insert a watermark for example
-                }
+            foreach($posts as $post) {
                 
-                $watermark->resize(256, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });                
+                if($request->{$post->id} != null || $request->type_campaign == 0) {
 
-                $img->insert($watermark, 'bottom-right', 30, 55);
+                    // open an image file
+                    $img = Image::make('storage/'.$post->image);
 
+                    //width
+                    $width = Image::make('storage/'.$post->image)->width();
+                    //height
+                    $height = Image::make('storage/'.$post->image)->height();
 
-                $name_img = $count.'.jpg';
+                    if($post->logo == 0) {
+                        // and insert a watermark for example
+                        $watermark = Image::make('storage/'.$user->path_logo_one);
+                    } else {
+                        $watermark = Image::make('storage/'.$user->path_logo_two);
+                        // and insert a watermark for example
+                    }
+                    
+                    $watermark->resize(256, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });                
 
-                $color = $post->color;
-
-                $clinic_name_format = mb_strtoupper($clinic->name, 'UTF-8');
-
-                $text_rt = $clinic_name_format."\n"."RC: ".$clinic->clinic_record."\n"."RT: ".$clinic->technical_manager."\n"."CRO: ".$clinic->professional_record;
-
-                ini_set('default_charset', 'UTF-8');
-
-                $img->text($text_rt, 30/* x */, $height-30 /* y */, function($font) use ($color) {
-                    $font->file(public_path('storage/fonts/calibri-bold.ttf'));
-                    $font->size(14);
-                    $font->color($color);
-                    $font->align('left');
-                    $font->valign('bottom');
-                    $font->angle(0);
-                });
+                    $img->insert($watermark, 'bottom-right', 30, 55);
 
 
-                if($post->logo == 0) {
-                    $color = '#7FC15E';
-                } else {
-                    $color = '#FFFFFF';
+                    $name_img = $count.'.jpg';
+
+                    $color = $post->color;
+
+                    $clinic_name_format = mb_strtoupper($clinic->name, 'UTF-8');
+
+                    $text_rt = $clinic_name_format."\n"."RC: ".$clinic->clinic_record."\n"."RT: ".$clinic->technical_manager."\n"."CRO: ".$clinic->professional_record;
+
+                    ini_set('default_charset', 'UTF-8');
+
+                    $img->text($text_rt, 30/* x */, $height-30 /* y */, function($font) use ($color) {
+                        $font->file(public_path('storage/fonts/calibri-bold.ttf'));
+                        $font->size(14);
+                        $font->color($color);
+                        $font->align('left');
+                        $font->valign('bottom');
+                        $font->angle(0);
+                    });
+
+
+                    if($post->logo == 0) {
+                        $color = '#7FC15E';
+                    } else {
+                        $color = '#FFFFFF';
+                    }
+
+                    $img->text($clinic->name, $width-107/* x */, $height-30 /* y */, function($font) use ($color) {
+                        $font->file(public_path('storage/fonts/calibri-bold-italic.ttf'));
+                        $font->size(25);
+                        $font->color($color);
+                        $font->align('right');
+                        $font->valign('bottom');
+                        $font->angle(0);
+                    });
+
+                    $img->save('storage/images/tmp/'.$name_img);
+
+                    $count++;
+
                 }
 
-                $img->text($clinic->name, $width-107/* x */, $height-30 /* y */, function($font) use ($color) {
-                    $font->file(public_path('storage/fonts/calibri-bold-italic.ttf'));
-                    $font->size(25);
-                    $font->color($color);
-                    $font->align('right');
-                    $font->valign('bottom');
-                    $font->angle(0);
-                });
-
-                $img->save('storage/images/tmp/'.$name_img);
-
-                $count++;
             }
 
     

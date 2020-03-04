@@ -24,6 +24,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('posts', 'PostController')->names('posts')->parameters(['posts'=>'posts']);
 
+    Route::get('posts_filter/{id}', 'PostController@list_filter')->name('posts.filter');
+
     Route::resource('figures', 'FigureController')->names('figures')->parameters(['figures'=>'figures']);
 
     Route::resource('logos', 'LogoController')->names('logos')->parameters(['logos'=>'logos']);

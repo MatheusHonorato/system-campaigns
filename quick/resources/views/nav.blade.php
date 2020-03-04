@@ -29,12 +29,14 @@
                         Campanhas
                 </a>
             </li>
+            @if(Auth::user()->type_user == 0)
             <li class="nav-item">
                 <a  href="" class="nav-link" data-toggle="modal" data-target="#modallogo">
                     <i class="fa fa-eyedropper fa-2x" aria-hidden="true"></i>
                         Logo
                 </a>
             </li>
+            @endif
             <li class="nav-item">
                 <a href="" class="nav-link" data-toggle="modal" data-target="#modaldownload">
                     <i class="fa fa-download fa-2x" aria-hidden="true"></i>

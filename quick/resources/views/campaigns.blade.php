@@ -5,7 +5,7 @@
 @include('nav')
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="col-md-11">
+            <div class="col-md-12">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <button type="button" class="close" data-dismiss="alert">×</button>
@@ -15,16 +15,16 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Campanhas</h1>
                     @if(Auth::user()->type_user == 0)
-                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal"><i class="fa fa-plus-circle" aria-hidden="true"></i> Nova</button>
                     @endif
                 </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">Nome</th>
-                            <th scope="col">Acessar</th>
+                            <th scope="col" class="text-center">Acessar</th>
                             @if(Auth::user()->type_user == 0)
-                                <th scope="col">Excluir</th>
+                                <th scope="col" class="text-center">Excluir</th>
                             @endif
                         </tr>
                     </thead>
@@ -32,21 +32,21 @@
                         @foreach($campaigns as $campaign)
                         <tr>
                             <td id="campaign_name_{{ $campaign->id }}">{{ $campaign->name }}</td>
-                            <td>
+                            <td class="text-center">
 
                                 <form action="{{ route('posts.index') }}" method="GET">
                 
                                     <input type="hidden" name="id" value="{{ $campaign->id }}">
                                   
-                                    <button type="submit" class="btn btn-primary">Acessar</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> Acessar</button>
                                 </form>
                             </td>
                             @if(Auth::user()->type_user == 0)
-                            <td>
+                            <td class="text-center">
                                 <form class="delete-c" action="{{ route('campaigns.destroy', $campaign->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Excluir</button>
+                                    <button type="submit" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i> Excluir</button>
                                 </form>
                             </td>
                             @endif
@@ -113,7 +113,7 @@
                 </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
             </form>
         </div>
     </div>

@@ -4,7 +4,7 @@
 
         @include('nav')
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="col-md-11">
+            <div class="col-md-12">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <button type="button" class="close" data-dismiss="alert">×</button>
@@ -14,7 +14,7 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Clínicas</h1>
                     @if(Auth::user()->type_user == 0)
-                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal">Novo</button>
+                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal"><i class="fa fa-plus-circle" aria-hidden="true"></i> Nova</button>
                     @endif
                 </div>
                 <table class="table table-hover">
@@ -22,12 +22,12 @@
                         <tr>
                             <th scope="col">Nome</th>
                             @if(Auth::user()->type_user == 0)
-                                <th scope="col">Editar</th>
+                                <th scope="col" class="text-center">Editar</th>
                             @else
-                                <th scope="col">Visualizar</th>
+                                <th scope="col" class="text-center">Visualizar</th>
                             @endif
                             @if(Auth::user()->type_user == 0)
-                                <th scope="col">Excluir</th>
+                                <th scope="col" class="text-center">Excluir</th>
                             @endif
                         </tr>
                     </thead>
@@ -35,9 +35,9 @@
                         @foreach($clinics as $clinic)
                         <tr>
                             <td id="clinic_name_{{ $clinic->id }}">{{ $clinic->name }}</td>
-                            <td>
+                            <td class="text-center">
                                 <!-- Modal Edit --> 
-                                <div class="modal fade" id="modalEdit{{ $clinic->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal fade text-left" id="modalEdit{{ $clinic->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -113,7 +113,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 @if(Auth::user()->type_user == 0)
-                                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
                                                 @endif
                                                 </form>
                                             </div>
@@ -121,17 +121,17 @@
                                     </div>
                                 </div>
                                 @if(Auth::user()->type_user == 0)
-                                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#modalEdit{{ $clinic->id }}">Editar</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit{{ $clinic->id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</button>
                                 @else
-                                    <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#modalEdit{{ $clinic->id }}">Visualizar</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEdit{{ $clinic->id }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Visualizar</button>
                                 @endif
                             </td>
                             @if(Auth::user()->type_user == 0)
-                            <td>
+                            <td class="text-center">
                                 <form class="delete-cl" action="{{ route('clinics.destroy', $clinic->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger">Excluir</button>
+                                    <button class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i> Excluir</button>
                                 </form>
                             </td>
                             @endif
@@ -195,7 +195,7 @@
                 </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
             </form>
         </div>
     </div>

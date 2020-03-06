@@ -76,7 +76,17 @@
                 @yield('content')
             </div>
         </div>
-       
+
+        @if((Route::currentRouteName() != 'login') && (Route::currentRouteName() != 'welcme') && (Route::currentRouteName() != 'register'))
+            @if(Auth::user()->type_user == 0)
+                @include('logo')
+            @endif
+            @if(Auth::user()->type_user == 2)
+                @include('alert-register')
+            @endif
+            @include('download')
+        @endif
+
         <!-- Scripts -->
         <script src="{{ asset('js/jquery-3.4.1.slim.min.js') }}"></script>
 

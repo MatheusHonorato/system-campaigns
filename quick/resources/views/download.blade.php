@@ -14,24 +14,40 @@
                         <input type="hidden" id="type_campaign" name="type_campaign" value="0">
                         <div class="form-group row">
                             <label class="pl-0 col-sm-2 col-form-label">Clínica</label>
-                            <select class="form-control" name="clinic">
-                                @foreach($clinics_option as $clinic)
-                                    <option value="{{ $clinic->id }}">{{ $clinic->name }}</option>
+                            <select id="clinic" class="form-control" name="clinic" onclick="javascript:alterClinic(this);">
+                                @foreach($clinics_option as $key => $clinic)
+                                    <option value="{{ $clinic->id }}"
+                                    
+                                    @if($key == 0)
+                                        selected
+                                    @endif
+
+                                    >{{ $clinic->name }}</option>
                                 @endforeach
                             </select>   
                         </div>
                         <div class="form-group row">
                             <label class="pl-0 col-sm-2 col-form-label">Campanha</label>
-                            <select id="select_posts" class="form-control" name="campaign">
-                                @foreach($campaigns_option as $campaign)
-                                    <option value="{{ $campaign->id }}">{{ $campaign->name }}</option>
+                            <select id="select_posts" class="form-control" name="campaign" onclick="javascript:alterCampaign(this);">
+                                @foreach($campaigns_option as $key => $campaign)
+                                    <option value="{{ $campaign->id }}"
+                                    
+                                     @if($key == 0)
+                                        selected
+                                    @endif
+
+                                    >{{ $campaign->name }}</option>
                                 @endforeach
                             </select>   
                         </div>
 
+                        <div class="form-group row" id="form-group-description">
+                            
+                        </div>
+
                         <div class="form-group text-center">
-                            <button id="btnCollapseEdit" onclick="getPosts()" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="false">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar
+                            <button id="btnCollapseEdit" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="false">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar
                             </button>
                         </div>
 
@@ -60,10 +76,21 @@
 
 
 <script>
-
     var destiny_posts = document.getElementById('body_posts');
-    var click_posts = document.getElementById('select_posts');
+    var destiny_alerts = document.getElementById('form-group-description');
+    var click_posts = document.getElementById('select_posts').value;
     var type_campaign = document.getElementById('type_campaign');
+    var clinic = document.getElementById('clinic').value;
+
+    function alterClinic(clinic_id) {
+        clinic = clinic_id.value;
+        getPostsAndAlertCampaign();
+    }
+
+    function alterCampaign(campaign_id) {
+        click_posts = campaign_id.value;
+        getPostsAndAlertCampaign();
+    }
 
     function populateHeader(jsonObj) {
         
@@ -91,10 +118,36 @@
         }
         
     }
+    function populateAlert(jsonObj) {
+        
+        result = jsonObj.response;
+        while (destiny_alerts.firstChild) {
+            destiny_alerts.removeChild(destiny_alerts.firstChild);
+        }
+
+        var label = document.createElement("label");
+        label.className  = "pl-0 col-sm-2 col-form-label";
+        label.textContent = "Observações"; 
+        destiny_alerts.appendChild(label);
+        var campaign_id = click_posts;
+        for (i = 0; i < result.length; i = i + 1) {
+
+            var strong = document.createElement("strong");
+            strong.textContent = result[i].description;
+            var alert = document.createElement("div");
+            alert.className = "alert alert-danger col-md-12";
+            
+            alert.appendChild(strong);
+
+            destiny_alerts.appendChild(alert);
+        }
+        
+    }
+
     function getPosts() {
         destiny_posts.disabled = false;
         type_campaign.value = 1;
-        var campaign_id = click_posts.value;
+        var campaign_id = click_posts;
         var url = "{{ route('welcome') }}/posts_filter/"+campaign_id;
         var requestURL = url;
         var request = new XMLHttpRequest();
@@ -107,4 +160,25 @@
             populateHeader(posts);
         }
     };
+
+    function getAlerts() {
+        var url = "{{ route('welcome') }}/alert?clinic="+clinic+"&campaign="+click_posts;
+        var requestURL = url;
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL, true);
+        request.responseType = 'json';
+        request.send();
+        
+        request.onload = function() {
+            var alerts = request;
+            console.log(alerts);
+            populateAlert(alerts);
+        }
+    };
+
+    function getPostsAndAlertCampaign() {
+        getPosts();
+        getAlerts();
+    }
+        
 </script>

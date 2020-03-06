@@ -77,7 +77,4 @@
                 </table>
             </div>
         </main>
-   
-@include('logo')
-@include('download')
 @endsection

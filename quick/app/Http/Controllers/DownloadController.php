@@ -99,9 +99,9 @@ class DownloadController extends Controller
 
                     $img->save('storage/images/tmp/'.$name_img);
 
-                    $count++;
-
                 }
+
+                $count++;
 
             }
 

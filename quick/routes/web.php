@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('download', 'DownloadController@index')->name('download');
 
+    Route::get('alert', 'AlertCampaignController@index')->name('alert.campaign.list');
+
+    Route::post('alert', 'AlertCampaignController@store')->name('alert.campaign.register');
+
     Route::get('register', 'Auth\RegisterController@register');
 });
 

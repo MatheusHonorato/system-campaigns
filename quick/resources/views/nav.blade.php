@@ -37,8 +37,16 @@
                 </a>
             </li>
             @endif
+            @if(Auth::user()->type_user == 2)
             <li class="nav-item">
-                <a href="" class="nav-link" data-toggle="modal" data-target="#modaldownload">
+                <a href="" class="nav-link" data-toggle="modal" data-target="#modalalert" onclick="getPosts()">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                        Observações
+                </a>
+            </li>
+            @endif
+            <li class="nav-item">
+                <a href="" class="nav-link" data-toggle="modal" data-target="#modaldownload" onclick="getPostsAndAlertCampaign()">
                     <i class="fa fa-download fa-2x" aria-hidden="true"></i>
                         Download
                 </a>

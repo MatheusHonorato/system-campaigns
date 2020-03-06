@@ -12,36 +12,11 @@
                     </div>
                 @endif
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-                    <h1 class="h2">Posts</h1>
+                    <h1 class="h2 pt-2">Posts - Campanha: {{ $campaign->name }}</h1>
                     @if(Auth::user()->type_user == 0)
                         <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal"><i class="fa fa-plus-circle" aria-hidden="true"></i>
  Novo</button>
                     @endif
-                </div>
-
-                <div class="row pb-2 mb-3">
-                    @if(Auth::user()->type_user == 0)
-                        <h1 class="h2 col-md-4">Nome</h1>
-                        <form class="col-md-3 pl-0" action="{{ route('campaigns.update', $campaign->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="mb-0 form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
-                                <input type="text" class="form-control" name="name" placeholder="Nome" value="{{ $campaign->name }}" minlength="10" maxlength="50" required>
-                                @if ($errors->has('name'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('name') }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                        </form>
-                        <div id="area-button-save-title-c" class="col-md-3 text-right pl-0 pr-4">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
-                    @else
-                                            <div id="area-button-save-title-c" class="col-md-12 text-left pl-0 pr-4">
-
-                        <h1 class="h2 col-md-12">Campanha: {{ $campaign->name }}</h1>
-                    @endif
-                    </div>
                 </div>
                 <table class="table table-hover">
                     <thead>
@@ -284,8 +259,6 @@
     </div>
   </div>
 </div>
-@include('logo')
-@include('download')
 @endsection
 
 

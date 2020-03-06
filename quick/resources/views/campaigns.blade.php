@@ -119,7 +119,4 @@
     </div>
   </div>
 </div>
-
-@include('logo')
-@include('download')
 @endsection

@@ -20,7 +20,7 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        $campaigns = Campaign::paginate(15);
+        $campaigns = Campaign::orderBy('name', 'ASC')->paginate(15);
         $clinics_option = Clinic::all();
         $campaigns_option = Campaign::all();
 

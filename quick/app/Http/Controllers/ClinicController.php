@@ -17,7 +17,7 @@ class ClinicController extends Controller
      */
     public function index()
     {
-        $clinics = Clinic::paginate(15);
+        $clinics = Clinic::orderBy('name', 'ASC')->paginate(15);
         $clinics_option = Clinic::all();
         $campaigns_option = Campaign::all();
 

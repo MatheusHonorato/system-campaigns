@@ -11,7 +11,7 @@
             <div class="container">
                 <div class="modal-body">
                     <form action="{{ route('download') }}" method="GET">
-                        <input type="hidden" id="type_campaign" name="type_campaign" value="0">
+                        <input type="hidden" id="type_campaign" name="type_campaign" value="1">
                         <div class="form-group row">
                             <label class="pl-0 col-sm-2 col-form-label">Clínica</label>
                             <select id="clinic" class="form-control" name="clinic" onclick="javascript:alterClinic(this);">
@@ -46,7 +46,7 @@
                         </div>
 
                         <div class="form-group text-center">
-                            <button id="btnCollapseEdit" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="false">
+                            <button id="btnCollapseEdit" class="btn btn-primary" type="button" onclick="javascript:alterType();" data-toggle="collapse" data-target="#collapseEdit" aria-expanded="false">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar
                             </button>
                         </div>
@@ -81,6 +81,10 @@
     var click_posts = document.getElementById('select_posts').value;
     var type_campaign = document.getElementById('type_campaign');
     var clinic = document.getElementById('clinic').value;
+
+    function alterType() {
+        type_campaign.value = 1;
+    }
 
     function alterClinic(clinic_id) {
         clinic = clinic_id.value;
@@ -146,7 +150,6 @@
 
     function getPosts() {
         destiny_posts.disabled = false;
-        type_campaign.value = 1;
         var campaign_id = click_posts;
         var url = "{{ route('welcome') }}/posts_filter/"+campaign_id;
         var requestURL = url;

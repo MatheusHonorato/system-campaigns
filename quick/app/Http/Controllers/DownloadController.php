@@ -88,7 +88,7 @@ class DownloadController extends Controller
                         $color = '#FFFFFF';
                     }
 
-                    $img->text($clinic->name, $width-107/* x */, $height-30 /* y */, function($font) use ($color) {
+                    $img->text($clinic->name, $width-30/* x */, $height-30 /* y */, function($font) use ($color) {
                         $font->file(public_path('storage/fonts/calibri-bold-italic.ttf'));
                         $font->size(25);
                         $font->color($color);

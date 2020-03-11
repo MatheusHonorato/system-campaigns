@@ -10,6 +10,7 @@ use App\Post;
 use App\CampaignPost;
 use Storage;
 use Auth;
+use App\Type;
 
 class CampaignController extends Controller
 {
@@ -20,11 +21,12 @@ class CampaignController extends Controller
      */
     public function index()
     {
+        $types = Type::all();
         $campaigns = Campaign::orderBy('name', 'ASC')->paginate(15);
-        $clinics_option = Clinic::all();
+        $clinics_option = Clinic::orderBy('name', 'ASC')->get();
         $campaigns_option = Campaign::all();
 
-        return view('campaigns', compact('campaigns','clinics_option','campaigns_option'));
+        return view('campaigns', compact('campaigns','clinics_option','campaigns_option','types'));
     }
 
     /**

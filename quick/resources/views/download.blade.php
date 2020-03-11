@@ -55,6 +55,7 @@
                                 <table id="table-select-posts" class="table table-hover">
                                     <thead>
                                         <tr>
+                                            <th scope="col">Código</th>
                                             <th scope="col">Imagem</th>
                                             <th scope="col" class="text-center">Baixar</th>
                                         </tr>
@@ -103,6 +104,8 @@
             destiny_posts.removeChild(destiny_posts.firstChild);
         }
         for (i = 0; i < result.length; i = i + 1) {
+            var td_number = document.createElement("td");
+            td_number.textContent = i+1;
             var img = document.createElement("img");
             img.src = "{{ route('welcome') }}/storage/"+result[i].image;
             img.width = 100;
@@ -114,8 +117,15 @@
             input.name = result[i].id;
             input.type = "checkbox";
             input.checked = "checked";
-            tdd.appendChild(input);
+            var styleChecked = document.createElement("label");
+            styleChecked.className = "container-check";
+            styleChecked.appendChild(input);
+            var span = document.createElement("span");
+            span.className = "checkmark";
+            styleChecked.appendChild(span);
+            tdd.appendChild(styleChecked);
             var tr = document.createElement("tr");
+            tr.appendChild(td_number);
             tr.appendChild(td);
             tr.appendChild(tdd);
             destiny_posts.appendChild(tr);
@@ -129,10 +139,13 @@
             destiny_alerts.removeChild(destiny_alerts.firstChild);
         }
 
-        var label = document.createElement("label");
-        label.className  = "pl-0 col-sm-2 col-form-label";
-        label.textContent = "Observações"; 
-        destiny_alerts.appendChild(label);
+        if(result.length > 0) {
+            var label = document.createElement("label");
+            label.className  = "pl-0 col-sm-2 col-form-label";
+            label.textContent = "Observações"; 
+            destiny_alerts.appendChild(label);
+        }
+       
         var campaign_id = click_posts;
         for (i = 0; i < result.length; i = i + 1) {
 

@@ -15,16 +15,27 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+
+Route::get('teste', function () {
+    echo "teste";
+})->name('teste');
+
 Auth::routes();
 
 Route::middleware('auth')->group(function () {
     Route::resource('campanhas', 'CampaignController')->names('campaigns')->parameters(['campanhas'=>'campaigns']);
+
+    Route::resource('categorias', 'CategoryController')->names('categories')->parameters(['categorias'=>'categories']);
+
+    Route::resource('tipos/campanhas', 'TypeController')->names('types')->parameters(['tipos'=>'types']);
 
     Route::resource('clinicas', 'ClinicController')->names('clinics')->parameters(['clinicas'=>'clinics']);
 
     Route::resource('posts', 'PostController')->names('posts')->parameters(['posts'=>'posts']);
 
     Route::get('posts_filter/{id}', 'PostController@list_filter')->name('posts.filter');
+
+    Route::get('categories_filter/{type}', 'CategoryController@list_filter')->name('category.filter');
 
     Route::resource('figures', 'FigureController')->names('figures')->parameters(['figures'=>'figures']);
 

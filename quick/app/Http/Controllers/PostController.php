@@ -24,7 +24,7 @@ class PostController extends Controller
     {
         $posts = Post::where('campaign_id', $request->id)->paginate(30);
         $campaigns = Campaign::all();
-        $clinics_option = Clinic::all();
+        $clinics_option = Clinic::orderBy('name', 'ASC')->get();
         $campaigns_option = Campaign::all();
         $campaign = Campaign::find($request->id);
 

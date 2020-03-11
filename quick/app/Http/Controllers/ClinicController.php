@@ -18,7 +18,7 @@ class ClinicController extends Controller
     public function index()
     {
         $clinics = Clinic::orderBy('name', 'ASC')->paginate(15);
-        $clinics_option = Clinic::all();
+        $clinics_option = Clinic::orderBy('name', 'ASC')->get();
         $campaigns_option = Campaign::all();
 
         return view('clinics', compact('clinics','clinics_option','campaigns_option'));

@@ -81,6 +81,31 @@
                     </span>
                     @endif
                 </div>
+                <div class="form-group has-feedback {{ $errors->has('type') ? 'has-error' : '' }}">
+                    <label>Tipo</label>
+                    <select class="form-control" name="type" onclick="getCategories(this)" required>
+                    @foreach($types as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
+                    </select>
+                    @if ($errors->has('type'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('type') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div id="body_categories" class="form-group has-feedback {{ $errors->has('campaigns') ? 'has-error' : '' }}">
+                    <!--<select class="form-control" name="category" required>
+                    @foreach($types as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
+                    </select>-->
+                    @if ($errors->has('campaigns'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('campaigns') }}</strong>
+                        </span>
+                    @endif
+                </div>
                 <div class="form-group has-feedback {{ $errors->has('logo') ? 'has-error' : '' }}">
                     <label>Logo</label>
                     <select class="form-control" name="logo" required>
@@ -120,3 +145,70 @@
   </div>
 </div>
 @endsection
+
+
+
+<script>
+    var destiny_categories = document.getElementById('body_categories');
+
+    function populateHeaderCampaign(jsonObj) {
+        
+        result = jsonObj.response;
+        
+        if(destiny_categories) {
+            while (destiny_categories.firstChild) {
+                destiny_categories.removeChild(destiny_categories.firstChild);
+            }
+        }
+
+        var label_campaign = document.createElement("label");
+        label_campaign.textContent = "Categoria"; 
+        console.log(destiny_categories);
+        destiny_categories.appendChild(label_campaign);
+
+        for (i = 0; i < result.length; i = i + 1) {
+            var td_number = document.createElement("td");
+            td_number.textContent = i+1;
+            var img = document.createElement("img");
+            img.src = "{{ route('welcome') }}/storage/"+result[i].image;
+            img.width = 100;
+            var td = document.createElement("td");
+            td.appendChild(img);
+            var tdd = document.createElement("td");
+            tdd.className = "text-center";
+            var input = document.createElement("input");
+            input.name = result[i].id;
+            input.type = "checkbox";
+            input.checked = "checked";
+            var styleChecked = document.createElement("label");
+            styleChecked.className = "container-check";
+            styleChecked.appendChild(input);
+            var span = document.createElement("span");
+            span.className = "checkmark";
+            styleChecked.appendChild(span);
+            tdd.appendChild(styleChecked);
+            var tr = document.createElement("tr");
+            tr.appendChild(td_number);
+            tr.appendChild(td);
+            tr.appendChild(tdd);
+            destiny_posts.appendChild(tr);
+        }
+        
+    }
+    
+    function getCategories(id) {
+        var url = "{{ route('welcome') }}/categories_filter/"+id.value;
+        var requestURL = url;
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL, true);
+        request.responseType = 'json';
+        request.send();
+        
+        request.onload = function() {
+            var categories = request;
+            populateHeaderCampaign(categories);
+        }
+    };
+
+        
+</script>

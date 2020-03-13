@@ -12,6 +12,12 @@
                         <strong>{{ $message }}</strong>
                     </div>
                 @endif
+                @if ($message = Session::get('error'))
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>{{ $message }}</strong>
+                    </div>
+                @endif
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Categorias</h1>
                     @if(Auth::user()->type_user == 0)
@@ -34,10 +40,8 @@
                             <td id="type_name_{{ $category->id }}">{{ $category->name }}</td>
                             <td class="text-center">
 
-                                <form action="{{ route('categories.index') }}" method="GET">
-                
-                                    <input type="hidden" name="id" value="{{ $category->id }}">
-                                  
+                                <form action="{{ route('categories.show', $category->id) }}" method="GET">
+                                                  
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> Acessar</button>
                                 </form>
                             </td>
@@ -92,15 +96,6 @@
                         <span class="help-block">
                             <strong>{{ $errors->first('type') }}</strong>
                         </span>
-                    @endif
-                </div>
-                <div class="form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
-                    <label>Data</label>
-                    <input type="date" class="form-control" name="date" value="{{ date('Y-m-d') }}" required>
-                    @if ($errors->has('date'))
-                    <span class="help-block">
-                        <strong>{{ $errors->first('date') }}</strong>
-                    </span>
                     @endif
                 </div>
         </div>

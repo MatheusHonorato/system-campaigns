@@ -12,8 +12,14 @@
                         <strong>{{ $message }}</strong>
                     </div>
                 @endif
+                @if ($message = Session::get('error'))
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>{{ $message }}</strong>
+                    </div>
+                @endif
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-                    <h1 class="h2">Campanhas - tipo</h1>
+                    <h1 class="h2">Tipos</h1>
                     @if(Auth::user()->type_user == 0)
                         <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal"><i class="fa fa-plus-circle" aria-hidden="true"></i> Novo</button>
                     @endif
@@ -33,7 +39,7 @@
                         <tr>
                             <td id="type_name_{{ $type->id }}">{{ $type->name }}</td>
                             <td class="text-center">           
-                                <a href="{{ route('categories.show', $type->id) }}" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> Acessar</a>
+                                <a href="{{ route('types.show', $type->id) }}" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> Acessar</a>
                             </td>
                             @if(Auth::user()->type_user == 0)
                             <td class="text-center">

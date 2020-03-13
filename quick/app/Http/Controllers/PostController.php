@@ -20,19 +20,9 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $posts = Post::where('campaign_id', $request->id)->paginate(30);
-        $campaigns = Campaign::all();
-        $clinics_option = Clinic::orderBy('name', 'ASC')->get();
-        $campaigns_option = Campaign::all();
-        $campaign = Campaign::find($request->id);
-
-        $user = User::find(1);
-        $logo_one = $user->path_logo_one;
-        $logo_two = $user->path_logo_two;
-
-        return view('posts', compact('logo_one','logo_two','posts','campaign','campaigns','clinics_option','campaigns_option'));
+        
     }
 
     /**

@@ -27,7 +27,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('categorias', 'CategoryController')->names('categories')->parameters(['categorias'=>'categories']);
 
-    Route::resource('tipos/campanhas', 'TypeController')->names('types')->parameters(['tipos'=>'types']);
+    Route::get('listar/categorias/{type}', 'CategoryController@index')->name('categories.list');
+
+    Route::resource('tipos', 'TypeController')->names('types')->parameters(['tipos'=>'types']);
 
     Route::resource('clinicas', 'ClinicController')->names('clinics')->parameters(['clinicas'=>'clinics']);
 

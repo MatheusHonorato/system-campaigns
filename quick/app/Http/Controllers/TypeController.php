@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Type;
+use App\Category;
 use App\Clinic;
 use App\Campaign;
 use Auth;
@@ -66,9 +67,14 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($type)
     {
-        //
+        $types = Type::all();
+        $type_id = 0;
+        $clinics_option = Clinic::orderBy('name', 'ASC')->get();
+        $campaigns_option = Campaign::all();
+        $categories = Category::where('type_id', $type)->paginate(15);
+        return view('categories', compact('type_id','categories','clinics_option','campaigns_option','types'));
     }
 
     /**
@@ -102,6 +108,17 @@ class TypeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(Auth::user()->type_user == 0) {
+            $categories = Category::where('type_id', $id)->get();
+            if(count($categories) > 0) {
+                return back()->with('error','Um tipo não pode ser excluído se ainda possuir categorias associadas a ele!');
+            } 
+            
+            $type = Type::find($id);
+            $type->delete();
+            return back()->with('success','Tipo excluído com sucesso!');
+        }
+
+        return back()->with('error','Você não possui permissão!');
     }
 }

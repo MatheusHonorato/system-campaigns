@@ -15,7 +15,7 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 class="h2">Campanhas</h1>
                     @if(Auth::user()->type_user == 0)
-                        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal"><i class="fa fa-plus-circle" aria-hidden="true"></i> Nova</button>
+                        <button type="button" value="{{ $type_id }}"  onclick="getCategories(this)" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal"><i class="fa fa-plus-circle" aria-hidden="true"></i> Nova</button>
                     @endif
                 </div>
                 <table class="table table-hover">
@@ -29,32 +29,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($campaigns as $campaign)
-                        <tr>
-                            <td id="campaign_name_{{ $campaign->id }}">{{ $campaign->name }}</td>
-                            <td class="text-center">
-
-                                <form action="{{ route('posts.index') }}" method="GET">
-                
-                                    <input type="hidden" name="id" value="{{ $campaign->id }}">
-                                  
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> Acessar</button>
-                                </form>
-                            </td>
-                            @if(Auth::user()->type_user == 0)
-                            <td class="text-center">
-                                <form class="delete-c" action="{{ route('campaigns.destroy', $campaign->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i> Excluir</button>
-                                </form>
-                            </td>
-                            @endif
-                        </tr>
-                        @endforeach
+                        @if(isset($campaigns)) 
+                            @foreach($campaigns as $campaign)
+                            <tr>
+                                <td id="campaign_name_{{ $campaign->id }}">{{ $campaign->name }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('campaigns.show', $campaign->id) }}"  class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> Acessar</a>
+                                </td>
+                                @if(Auth::user()->type_user == 0)
+                                <td class="text-center">
+                                    <form class="delete-c" action="{{ route('campaigns.destroy', $campaign->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i> Excluir</button>
+                                    </form>
+                                </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
-                {{ $campaigns->links() }}
+                @if(isset($campaigns)) 
+                    {{ $campaigns->links() }}
+                @endif
             </div>
         </main>
     
@@ -83,7 +81,7 @@
                 </div>
                 <div class="form-group has-feedback {{ $errors->has('type') ? 'has-error' : '' }}">
                     <label>Tipo</label>
-                    <select class="form-control" name="type" onclick="getCategories(this)" required>
+                    <select class="form-control" id="type" name="type" onclick="getCategories(this)" required>
                     @foreach($types as $type)
                         <option value="{{ $type->id }}">{{ $type->name }}</option>
                     @endforeach
@@ -95,11 +93,6 @@
                     @endif
                 </div>
                 <div id="body_categories" class="form-group has-feedback {{ $errors->has('campaigns') ? 'has-error' : '' }}">
-                    <!--<select class="form-control" name="category" required>
-                    @foreach($types as $type)
-                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                    @endforeach
-                    </select>-->
                     @if ($errors->has('campaigns'))
                         <span class="help-block">
                             <strong>{{ $errors->first('campaigns') }}</strong>
@@ -144,9 +137,6 @@
     </div>
   </div>
 </div>
-@endsection
-
-
 
 <script>
     var destiny_categories = document.getElementById('body_categories');
@@ -163,36 +153,20 @@
 
         var label_campaign = document.createElement("label");
         label_campaign.textContent = "Categoria"; 
-        console.log(destiny_categories);
         destiny_categories.appendChild(label_campaign);
 
+        var select = document.createElement("select");
+        select.name = "category";
+        select.className = "form-control";
+
         for (i = 0; i < result.length; i = i + 1) {
-            var td_number = document.createElement("td");
-            td_number.textContent = i+1;
-            var img = document.createElement("img");
-            img.src = "{{ route('welcome') }}/storage/"+result[i].image;
-            img.width = 100;
-            var td = document.createElement("td");
-            td.appendChild(img);
-            var tdd = document.createElement("td");
-            tdd.className = "text-center";
-            var input = document.createElement("input");
-            input.name = result[i].id;
-            input.type = "checkbox";
-            input.checked = "checked";
-            var styleChecked = document.createElement("label");
-            styleChecked.className = "container-check";
-            styleChecked.appendChild(input);
-            var span = document.createElement("span");
-            span.className = "checkmark";
-            styleChecked.appendChild(span);
-            tdd.appendChild(styleChecked);
-            var tr = document.createElement("tr");
-            tr.appendChild(td_number);
-            tr.appendChild(td);
-            tr.appendChild(tdd);
-            destiny_posts.appendChild(tr);
+            
+            var option = document.createElement("option");
+            option.value = result[i].id;
+            option.textContent = result[i].name;
+            select.appendChild(option);
         }
+        destiny_categories.appendChild(select);
         
     }
     
@@ -209,6 +183,10 @@
             populateHeaderCampaign(categories);
         }
     };
-
         
 </script>
+
+@endsection
+
+
+

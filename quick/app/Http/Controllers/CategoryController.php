@@ -9,6 +9,7 @@ use App\Clinic;
 use App\Campaign;
 use Auth;
 use App\Type;
+use App\CategoryCampaign;
 
 class CategoryController extends Controller
 {
@@ -19,7 +20,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-      
+       
     }
 
     /**
@@ -44,7 +45,6 @@ class CategoryController extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'max:100'],
                 'type' => ['required', 'string', 'max:100'],
-                'date' => ['required', 'date']
             ],[
                 'name.required' => 'O campo Nome é obrigatório.',
                 'name.max' => 'Desculpe o nome excede o limite de caracteres.',
@@ -53,8 +53,7 @@ class CategoryController extends Controller
             if(
                 Category::create([
                     'type_id' => $request->type, 
-                    'name' => $request->name, 
-                    'date' => $request->date
+                    'name' => $request->name
                 ])
             ) {
                 return back()->with('success','Categoria atualizada com sucesso!');
@@ -69,14 +68,30 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($type)
+    public function show($id)
     {
         $types = Type::all();
-        $categories = Category::where('type_id', $type)->orderBy('name', 'ASC')->paginate(15);
+        $type_id = 0;
+        if(count($types) > 0){
+            $type_id = $types[0]->id;
+        } 
+        
+        $categorie_campaign = CategoryCampaign::where('category_id', $id)->get();
         $clinics_option = Clinic::orderBy('name', 'ASC')->get();
         $campaigns_option = Campaign::all();
 
-        return view('categories', compact('categories','clinics_option','campaigns_option','types'));
+        if(count($categorie_campaign) != 0) {
+            foreach($categorie_campaign as $cc) {
+                $ids[] = $cc->campaign_id;
+            }
+            
+            $campaigns = Campaign::whereIn('id', $ids)->orderBy('name', 'ASC')->paginate(15);
+
+            return view('campaigns', compact('type_id','campaigns','clinics_option','campaigns_option','types'));
+
+        }
+        
+        return view('campaigns', compact('type_id','clinics_option','campaigns_option','types'));
     }
 
     /**
@@ -115,6 +130,13 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $categorie_campaign = CategoryCampaign::where('category_id', $id)->get();
+        if(count($categorie_campaign)>0) {
+            return redirect()->back()->with('error','Uma categoria não pode ser excluida se ainda existirem campanhas associadas a ela!');
+        } else {
+            $category = Category::find($id);
+            $category->delete();
+            return redirect()->back()->with('success','Categoria excluída com sucesso!');
+        }
     }
 }

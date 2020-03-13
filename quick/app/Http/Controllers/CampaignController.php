@@ -11,6 +11,8 @@ use App\CampaignPost;
 use Storage;
 use Auth;
 use App\Type;
+use App\CategoryCampaign;
+use App\User;
 
 class CampaignController extends Controller
 {
@@ -22,11 +24,15 @@ class CampaignController extends Controller
     public function index()
     {
         $types = Type::all();
+        $type_id = 0;
+        if(count($types) > 0){
+            $type_id = $types[0]->id;
+        } 
         $campaigns = Campaign::orderBy('name', 'ASC')->paginate(15);
         $clinics_option = Clinic::orderBy('name', 'ASC')->get();
         $campaigns_option = Campaign::all();
 
-        return view('campaigns', compact('campaigns','clinics_option','campaigns_option','types'));
+        return view('campaigns', compact('type_id','campaigns','clinics_option','campaigns_option','types'));
     }
 
     /**
@@ -82,6 +88,12 @@ class CampaignController extends Controller
                     }
                 } 
             }
+
+            CategoryCampaign::create([
+                'campaign_id' => $campaign->id,
+                'category_id' => $request->category
+            ]);
+
     
             return back()->with('success','Campanha cadastrada com sucesso!');
         } else {
@@ -97,7 +109,18 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        //
+        $types = Type::all();
+        $posts = Post::where('campaign_id', $id)->paginate(30);
+        $campaigns = Campaign::all();
+        $clinics_option = Clinic::orderBy('name', 'ASC')->get();
+        $campaigns_option = Campaign::all();
+        $campaign = Campaign::find($id);
+
+        $user = User::find(1);
+        $logo_one = $user->path_logo_one;
+        $logo_two = $user->path_logo_two;
+
+        return view('posts', compact('id','logo_one','logo_two','types','posts','campaign','campaigns','clinics_option','campaigns_option'));
     }
 
     /**
@@ -123,19 +146,28 @@ class CampaignController extends Controller
         if(Auth::user()->type_user == 0) {
             $request->validate([
                 'name' => ['required', 'string', 'min:10', 'max:100'],
-                'description' => ['required', 'string', 'min:10', 'max:100']
             ],[
                 'name.required' => 'O campo Nome é obrigatório.',
                 'name.min' => 'Desculpe, mas o nome deve possuir no mínimo 10 caracteres.',
                 'name.max' => 'Desculpe o nome excede o limite de caracteres.',
     
-                'description.required' => 'O campo Descrição é obrigatório.',
-                'description.min' => 'Desculpe, mas a descrição deve possuir no mínimo 10 caracteres.',
-                'description.max' => 'Desculpe a descrição excede o limite de caracteres.'
             ]);
     
             $campaign = Campaign::find($id); 
-            $campaign->update($request->all());
+            $campaign->update([
+                'name' => $request->name
+            ]);
+            $category_campaign = CategoryCampaign::where('campaign_id', $id)->first();
+            if($category_campaign) {
+                $category_campaign->update([
+                    'category_id' => $request->category
+                ]);
+            } else {
+                $category_campaign = CategoryCampaign::create([
+                    'category_id' => $request->category,
+                    'campaign_id' => $id
+                ]);
+            }
     
             return back()->with('success','Campanha atualizada com sucesso!');
         } else {
@@ -164,13 +196,14 @@ class CampaignController extends Controller
                 $post->delete();
             }
     
-    
+            $category_campaign = CategoryCampaign::where('campaign_id', $id)->first();
+            $category_campaign->delete();
             $campaign = Campaign::find($id); 
             $campaign->delete();
     
             return redirect()->back()->with('success','Campanha excluída com sucesso!');
         } else {
-            return back()->with('error','Usuário não autorizado');
+            return redirect()->back()->with('error','Usuário não autorizado');
         }
        
     }

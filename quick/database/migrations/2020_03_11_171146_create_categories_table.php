@@ -18,7 +18,6 @@ class CreateCategoriesTable extends Migration
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('types');
             $table->string('name');
-            $table->date('date');	
             $table->timestamps();
         });
     }

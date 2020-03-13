@@ -107,9 +107,9 @@ class ClinicController extends Controller
         if(Auth::user()->type_user == 0) {
             $request->validate([
                 'name' => ['required', 'string', 'max:100'],
-                'clinic_record' => ['required', 'string', 'max:100'],
-                'technical_manager' => ['required', 'string', 'max:100'],
-                'professional_record' => ['required', 'string', 'max:100']
+                'clinic_record' => ['string', 'max:100'],
+                'technical_manager' => ['string', 'max:100'],
+                'professional_record' => ['string', 'max:100']
             ],[
                 'name.required' => 'O campo Nome é obrigatório.',
                 'name.min' => 'Desculpe, mas o nome deve possuir no mínimo 10 caracteres.',
@@ -127,7 +127,17 @@ class ClinicController extends Controller
                 'professional_record.min' => 'Desculpe, mas o campo Registro profissional deve possuir no mínimo 10 caracteres.',
                 'professional_record.max' => 'Desculpe o campo Registro profissional excede o limite de caracteres.'
             ]);
-    
+                
+            if($request->clinic_record == null) {
+                $request->clinic_record = "";
+            }
+            if($request->technical_manager == null) {
+                $request->technical_manager = "";
+            }
+            if($request->professional_record == null) {
+                $request->professional_record = "";
+            }
+            
             $clinic = Clinic::find($id); 
             $clinic->update($request->all());
     

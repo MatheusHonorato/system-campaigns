@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     protected $fillable = [
-        'type_id', 'name', 'date'
+        'type_id', 'name'
     ];
 }

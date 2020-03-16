@@ -16,7 +16,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('campaigns.index') }}"
+                <a href="#"
                 
                 @if(explode('/', Request::url())[3] == 'campanhas')
                     class="nav-link active"
@@ -24,10 +24,14 @@
                     class="nav-link"
                 @endif
 
-                >
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i>
-                        Campanhas
+                        G.Campanhas
                 </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                    <a class="dropdown-item" href="{{ route('types.index') }}" style="color: #252525 !important;">Tipos</a>
+                    <a class="dropdown-item" href="{{ route('campaigns.index') }}" style="color: #252525 !important;;">Campanhas - geral</a>
+                </div>
             </li>
             @if(Auth::user()->type_user == 0)
             <li class="nav-item">
